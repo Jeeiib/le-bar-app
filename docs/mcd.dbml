@@ -1,0 +1,97 @@
+// Le Bar'app - Modele Conceptuel de Donnees
+// A coller dans https://dbdiagram.io (bouton Import > "Import From DBML", ou directement dans l'editeur)
+// Puis Export > PNG ou PDF pour le livrable.
+
+Enum user_role {
+  BARMAKER
+  ADMIN
+}
+
+Enum cocktail_size {
+  S
+  M
+  L
+}
+
+Enum order_status {
+  COMMANDEE
+  EN_PREPARATION
+  TERMINEE
+}
+
+Enum prep_status {
+  PREPARATION_INGREDIENTS
+  ASSEMBLAGE
+  DRESSAGE
+  TERMINEE
+}
+
+Table users {
+  id integer [pk, increment]
+  name varchar(100) [not null]
+  email varchar(180) [unique, not null]
+  password_hash varchar(100) [not null]
+  role user_role [not null]
+  created_at timestamp [not null, default: `now()`]
+}
+
+Table bar_table {
+  id integer [pk, increment]
+  label varchar(40) [not null, note: 'ex: Table 12']
+  qr_slug varchar(60) [unique, not null, note: 'identifiant dans l URL du QR']
+}
+
+Table categories {
+  id integer [pk, increment]
+  name varchar(80) [unique, not null]
+  position integer [not null, default: 0, note: 'ordre d affichage de la carte']
+}
+
+Table cocktails {
+  id integer [pk, increment]
+  name varchar(120) [not null]
+  description text
+  image_url varchar(300)
+  is_available boolean [not null, default: true]
+  category_id integer [not null, ref: > categories.id]
+}
+
+Table ingredients {
+  id integer [pk, increment]
+  name varchar(80) [unique, not null]
+}
+
+Table cocktail_ingredients {
+  cocktail_id integer [ref: > cocktails.id]
+  ingredient_id integer [ref: > ingredients.id]
+  indexes {
+    (cocktail_id, ingredient_id) [pk]
+  }
+}
+
+Table cocktail_sizes {
+  id integer [pk, increment]
+  cocktail_id integer [not null, ref: > cocktails.id]
+  size cocktail_size [not null]
+  price decimal(6,2) [not null]
+  indexes {
+    (cocktail_id, size) [unique]
+  }
+}
+
+Table orders {
+  id integer [pk, increment]
+  table_id integer [not null, ref: > bar_table.id]
+  customer_name varchar(80)
+  status order_status [not null, default: 'COMMANDEE']
+  created_at timestamp [not null, default: `now()`]
+}
+
+Table order_items {
+  id integer [pk, increment]
+  order_id integer [not null, ref: > orders.id]
+  cocktail_id integer [not null, ref: > cocktails.id]
+  size cocktail_size [not null]
+  unit_price decimal(6,2) [not null]
+  preparation_status prep_status [not null, default: 'PREPARATION_INGREDIENTS']
+}
