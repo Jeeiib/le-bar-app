@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  back:
+    name: Back (Java 25)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Mise en place du JDK 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+
+      - name: Build, tests et couverture
+        working-directory: back
+        run: ./mvnw -B verify
+
+      - name: Archiver le rapport de couverture JaCoCo
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: back/target/site/jacoco/
+          if-no-files-found: ignore
+
+  front:
+    name: Front (Vue + TS)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verifier la presence du front
+        id: check
+        run: |
+          if [ -f front/package.json ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "Front pas encore initialise : job ignore."
+          fi
+
+      - name: Mise en place de Node
+        if: steps.check.outputs.exists == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: front/package-lock.json
+
+      - name: Installer les dependances
+        if: steps.check.outputs.exists == 'true'
+        working-directory: front
+        run: npm ci
+
+      - name: Lint
+        if: steps.check.outputs.exists == 'true'
+        working-directory: front
+        run: npm run lint --if-present
+
+      - name: Verification des types
+        if: steps.check.outputs.exists == 'true'
+        working-directory: front
+        run: npm run type-check --if-present
+
+      - name: Tests unitaires
+        if: steps.check.outputs.exists == 'true'
+        working-directory: front
+        run: npm run test:unit --if-present
+
+      - name: Build
+        if: steps.check.outputs.exists == 'true'
+        working-directory: front
+        run: npm run build --if-present
