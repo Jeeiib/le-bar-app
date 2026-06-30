@@ -43,6 +43,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/categories/**", "/api/ingredients/**", "/api/cocktails/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/tables/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/orders/queue").hasRole("BARMAKER")
                 .requestMatchers(HttpMethod.POST, "/api/orders").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/orders/*").permitAll()
