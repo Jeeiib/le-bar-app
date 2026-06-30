@@ -127,6 +127,16 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.13</version>
+				<configuration>
+					<!-- Hors mesure : code genere (entites Lombok), DTOs (records), bootstrap, et integration externe (client HTTP TheCocktailDB + seeder de demo). On mesure la logique metier. -->
+					<excludes>
+						<exclude>**/BarAppApiApplication.class</exclude>
+						<exclude>**/domain/**</exclude>
+						<exclude>**/dto/**</exclude>
+						<exclude>**/external/**</exclude>
+						<exclude>**/config/DataInitializer.class</exclude>
+					</excludes>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
@@ -150,10 +160,13 @@
 							<rules>
 								<rule>
 									<element>BUNDLE</element>
+									<!-- Exclusions : uniquement code genere / donnees / integration externe (aucune logique metier a tester) -->
 									<excludes>
 										<exclude>**/BarAppApiApplication.*</exclude>
 										<exclude>fr/lebarapp/api/domain/**</exclude>
 										<exclude>fr/lebarapp/api/dto/**</exclude>
+										<exclude>fr/lebarapp/api/external/**</exclude>
+										<exclude>fr/lebarapp/api/config/DataInitializer.*</exclude>
 									</excludes>
 									<limits>
 										<limit>

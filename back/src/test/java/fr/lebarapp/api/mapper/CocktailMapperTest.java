@@ -4,13 +4,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import fr.lebarapp.api.domain.Cocktail;
 import fr.lebarapp.api.domain.Category;
-import fr.lebarapp.api.domain.Ingredient;
+import fr.lebarapp.api.domain.CocktailIngredient;
 import fr.lebarapp.api.domain.Size;
+import fr.lebarapp.api.dto.CocktailIngredientRequest;
 import fr.lebarapp.api.dto.CocktailRequest;
 import fr.lebarapp.api.dto.CocktailResponse;
 import fr.lebarapp.api.dto.SizePriceRequest;
 import java.math.BigDecimal;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,10 +33,9 @@ class CocktailMapperTest {
     mockCocktail.setId(1L);
     mockCocktail.setName("Mojito");
     mockCocktail.setDescription("A classic mojito");
-    mockCocktail.setImageUrl("mojito.jpg");
     mockCocktail.setAvailable(true);
     mockCocktail.setCategory(mockCategory);
-    mockCocktail.setIngredients(new HashSet<>());
+    mockCocktail.setIngredients(new ArrayList<>());
   }
 
   @Test
@@ -48,12 +48,21 @@ class CocktailMapperTest {
     assertEquals("Mojito", response.name());
     assertEquals("A classic mojito", response.description());
     assertEquals(1L, response.categoryId());
+    assertNotNull(response.imageUrl());
   }
 
   @Test
   @DisplayName("toEntity should convert CocktailRequest to Cocktail")
   void testToEntity() {
-    CocktailRequest request = new CocktailRequest("Mojito", "A classic", "img.jpg", true, 1L, new HashSet<>(), List.of());
+    CocktailRequest request = new CocktailRequest(
+        "Mojito",
+        "A classic",
+        true,
+        1L,
+        List.of(),
+        "",
+        List.of()
+    );
 
     Cocktail cocktail = CocktailMapper.toEntity(request);
 
@@ -66,7 +75,15 @@ class CocktailMapperTest {
   @Test
   @DisplayName("updateEntity should update existing Cocktail")
   void testUpdateEntity() {
-    CocktailRequest request = new CocktailRequest("Updated Mojito", "Updated desc", "new.jpg", false, 1L, new HashSet<>(), List.of());
+    CocktailRequest request = new CocktailRequest(
+        "Updated Mojito",
+        "Updated desc",
+        false,
+        1L,
+        List.of(),
+        "",
+        List.of()
+    );
 
     CocktailMapper.updateEntity(request, mockCocktail);
 
@@ -87,5 +104,25 @@ class CocktailMapperTest {
 
     assertNotNull(mockCocktail.getSizes());
     assertEquals(2, mockCocktail.getSizes().size());
+  }
+
+  @Test
+  @DisplayName("toResponse should include ingredients with measure")
+  void testToResponseWithIngredients() {
+    fr.lebarapp.api.domain.Ingredient ing = new fr.lebarapp.api.domain.Ingredient();
+    ing.setId(2L);
+    ing.setName("Rum");
+
+    CocktailIngredient ci = new CocktailIngredient();
+    ci.setIngredient(ing);
+    ci.setMeasure("45ml");
+    mockCocktail.getIngredients().add(ci);
+
+    CocktailResponse response = CocktailMapper.toResponse(mockCocktail);
+
+    assertNotNull(response.ingredients());
+    assertEquals(1, response.ingredients().size());
+    assertEquals("Rum", response.ingredients().get(0).name());
+    assertEquals("45ml", response.ingredients().get(0).measure());
   }
 }

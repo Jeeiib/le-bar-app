@@ -10,6 +10,6 @@ public record CocktailResponse(
     boolean available,
     Long categoryId,
     String categoryName,
-    List<String> ingredients,
+    List<CocktailIngredientResponse> ingredients,
     List<SizePriceResponse> sizes
 ) {}

@@ -12,15 +12,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.lebarapp.api.domain.Size;
+import fr.lebarapp.api.dto.CocktailIngredientRequest;
 import fr.lebarapp.api.dto.CocktailRequest;
 import fr.lebarapp.api.dto.CocktailResponse;
 import fr.lebarapp.api.dto.SizePriceRequest;
 import fr.lebarapp.api.error.ResourceNotFoundException;
+import fr.lebarapp.api.repository.CocktailImageRepository;
 import fr.lebarapp.api.security.JwtService;
 import fr.lebarapp.api.service.CocktailService;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,7 +45,9 @@ class CocktailControllerTest {
     @MockitoBean
     private CocktailService cocktailService;
 
-    // Jeton d'un barmaker authentifie, pour les endpoints protegies
+    @MockitoBean
+    private CocktailImageRepository cocktailImageRepository;
+
     private String barmakerAuth() {
         return "Bearer " + jwtService.generateToken("barmaker@lebarapp.fr", "BARMAKER");
     }
@@ -52,7 +55,7 @@ class CocktailControllerTest {
     @Test
     void lectureDeTousLesCoktailsEstPublique() throws Exception {
         when(cocktailService.getAllCocktails())
-            .thenReturn(List.of(new CocktailResponse(1L, "Mojito", "Classic", "img.jpg", true, 1L, "Signatures", List.of(), List.of())));
+            .thenReturn(List.of(new CocktailResponse(1L, "Mojito", "Classic", "/api/cocktails/1/image", true, 1L, "Signatures", List.of(), List.of())));
 
         mockMvc.perform(get("/api/cocktails"))
             .andExpect(status().isOk())
@@ -62,7 +65,7 @@ class CocktailControllerTest {
     @Test
     void lectureDesCoktailsParCategorieEstPublique() throws Exception {
         when(cocktailService.getCocktailsByCategory(1L))
-            .thenReturn(List.of(new CocktailResponse(1L, "Mojito", "Classic", "img.jpg", true, 1L, "Signatures", List.of(), List.of())));
+            .thenReturn(List.of(new CocktailResponse(1L, "Mojito", "Classic", "/api/cocktails/1/image", true, 1L, "Signatures", List.of(), List.of())));
 
         mockMvc.perform(get("/api/cocktails?categoryId=1"))
             .andExpect(status().isOk())
@@ -72,7 +75,7 @@ class CocktailControllerTest {
     @Test
     void lectureParIdEstPublique() throws Exception {
         when(cocktailService.getCocktailById(1L))
-            .thenReturn(new CocktailResponse(1L, "Margarita", "Mexican", "img.jpg", true, 1L, "Signatures", List.of(), List.of()));
+            .thenReturn(new CocktailResponse(1L, "Margarita", "Mexican", "/api/cocktails/1/image", true, 1L, "Signatures", List.of(), List.of()));
 
         mockMvc.perform(get("/api/cocktails/1"))
             .andExpect(status().isOk())
@@ -84,10 +87,10 @@ class CocktailControllerTest {
         CocktailRequest request = new CocktailRequest(
             "Daiquiri",
             "Classic",
-            "img.jpg",
             true,
             1L,
-            Set.of(1L),
+            List.of(new CocktailIngredientRequest("Rum", "45ml")),
+            "",
             List.of(new SizePriceRequest(Size.S, new BigDecimal("8.0")))
         );
 
@@ -100,15 +103,15 @@ class CocktailControllerTest {
     @Test
     void creationParBarmakerRenvoie201() throws Exception {
         when(cocktailService.createCocktail(any()))
-            .thenReturn(new CocktailResponse(2L, "Daiquiri", "Classic", "img.jpg", true, 1L, "Signatures", List.of(), List.of()));
+            .thenReturn(new CocktailResponse(2L, "Daiquiri", "Classic", "/api/cocktails/2/image", true, 1L, "Signatures", List.of(), List.of()));
 
         CocktailRequest request = new CocktailRequest(
             "Daiquiri",
             "Classic",
-            "img.jpg",
             true,
             1L,
-            Set.of(1L),
+            List.of(new CocktailIngredientRequest("Rum", "45ml")),
+            "",
             List.of(new SizePriceRequest(Size.S, new BigDecimal("8.0")))
         );
 
@@ -125,10 +128,10 @@ class CocktailControllerTest {
         CocktailRequest request = new CocktailRequest(
             "",
             "Classic",
-            "img.jpg",
             true,
             1L,
-            Set.of(1L),
+            List.of(new CocktailIngredientRequest("Rum", "45ml")),
+            "",
             List.of(new SizePriceRequest(Size.S, new BigDecimal("8.0")))
         );
 
@@ -144,10 +147,10 @@ class CocktailControllerTest {
         CocktailRequest request = new CocktailRequest(
             "Margarita",
             "Mexican",
-            "img.jpg",
             true,
             1L,
-            Set.of(1L),
+            List.of(new CocktailIngredientRequest("Tequila", "45ml")),
+            "",
             List.of()
         );
 
@@ -170,15 +173,15 @@ class CocktailControllerTest {
     @Test
     void miseAJourRenvoie200() throws Exception {
         when(cocktailService.updateCocktail(eq(1L), any()))
-            .thenReturn(new CocktailResponse(1L, "Mojito Premium", "Classic", "img.jpg", true, 1L, "Signatures", List.of(), List.of()));
+            .thenReturn(new CocktailResponse(1L, "Mojito Premium", "Classic", "/api/cocktails/1/image", true, 1L, "Signatures", List.of(), List.of()));
 
         CocktailRequest request = new CocktailRequest(
             "Mojito Premium",
             "Classic",
-            "img.jpg",
             true,
             1L,
-            Set.of(1L),
+            List.of(new CocktailIngredientRequest("Rum", "45ml")),
+            "",
             List.of(new SizePriceRequest(Size.L, new BigDecimal("10.0")))
         );
 
@@ -201,10 +204,10 @@ class CocktailControllerTest {
         CocktailRequest request = new CocktailRequest(
             "Mojito Premium",
             "Classic",
-            "img.jpg",
             true,
             1L,
-            Set.of(1L),
+            List.of(new CocktailIngredientRequest("Rum", "45ml")),
+            "",
             List.of(new SizePriceRequest(Size.L, new BigDecimal("10.0")))
         );
 
@@ -218,5 +221,26 @@ class CocktailControllerTest {
     void suppressionSansTokenRenvoie4xx() throws Exception {
         mockMvc.perform(delete("/api/cocktails/1"))
             .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    void getImagePublic() throws Exception {
+        when(cocktailImageRepository.findByCocktailId(1L))
+            .thenReturn(java.util.Optional.of(new fr.lebarapp.api.domain.CocktailImage() {{
+                setData(new byte[]{1, 2, 3});
+                setContentType("image/jpeg");
+            }}));
+
+        mockMvc.perform(get("/api/cocktails/1/image"))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    void getImageNotFound() throws Exception {
+        when(cocktailImageRepository.findByCocktailId(99L))
+            .thenReturn(java.util.Optional.empty());
+
+        mockMvc.perform(get("/api/cocktails/99/image"))
+            .andExpect(status().isNotFound());
     }
 }

@@ -1,10 +1,13 @@
 package fr.lebarapp.api.web;
 
+import fr.lebarapp.api.domain.CocktailImage;
 import fr.lebarapp.api.dto.CocktailRequest;
 import fr.lebarapp.api.dto.CocktailResponse;
+import fr.lebarapp.api.repository.CocktailImageRepository;
 import fr.lebarapp.api.service.CocktailService;
 import jakarta.validation.Valid;
 import java.util.List;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,9 +25,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class CocktailController {
 
     private final CocktailService cocktailService;
+    private final CocktailImageRepository cocktailImageRepository;
 
-    public CocktailController(CocktailService cocktailService) {
+    public CocktailController(CocktailService cocktailService, CocktailImageRepository cocktailImageRepository) {
         this.cocktailService = cocktailService;
+        this.cocktailImageRepository = cocktailImageRepository;
     }
 
     @GetMapping
@@ -43,6 +48,18 @@ public class CocktailController {
     public ResponseEntity<CocktailResponse> getCocktailById(@PathVariable Long id) {
         CocktailResponse cocktail = cocktailService.getCocktailById(id);
         return ResponseEntity.ok(cocktail);
+    }
+
+    @GetMapping("/{id}/image")
+    public ResponseEntity<byte[]> getCocktailImage(@PathVariable Long id) {
+        CocktailImage image = cocktailImageRepository.findByCocktailId(id)
+            .orElse(null);
+        if (image == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_TYPE, image.getContentType())
+            .body(image.getData());
     }
 
     @PostMapping

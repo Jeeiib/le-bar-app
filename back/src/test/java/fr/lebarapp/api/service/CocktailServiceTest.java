@@ -3,24 +3,29 @@ package fr.lebarapp.api.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
 
 import fr.lebarapp.api.domain.Category;
 import fr.lebarapp.api.domain.Cocktail;
+import fr.lebarapp.api.domain.CocktailIngredient;
 import fr.lebarapp.api.domain.Ingredient;
 import fr.lebarapp.api.domain.Size;
+import fr.lebarapp.api.dto.CocktailIngredientRequest;
 import fr.lebarapp.api.dto.CocktailRequest;
 import fr.lebarapp.api.dto.CocktailResponse;
 import fr.lebarapp.api.dto.SizePriceRequest;
 import fr.lebarapp.api.error.ResourceNotFoundException;
+import fr.lebarapp.api.external.TheCocktailDbClient;
+import fr.lebarapp.api.external.TheCocktailDbClient.ImageData;
 import fr.lebarapp.api.mapper.CocktailMapper;
 import fr.lebarapp.api.repository.CategoryRepository;
+import fr.lebarapp.api.repository.CocktailImageRepository;
 import fr.lebarapp.api.repository.CocktailRepository;
 import fr.lebarapp.api.repository.IngredientRepository;
 import java.math.BigDecimal;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,6 +41,8 @@ class CocktailServiceTest {
   @Mock private CocktailRepository cocktailRepository;
   @Mock private CategoryRepository categoryRepository;
   @Mock private IngredientRepository ingredientRepository;
+  @Mock private CocktailImageRepository cocktailImageRepository;
+  @Mock private TheCocktailDbClient theCocktailDbClient;
 
   @InjectMocks private CocktailService cocktailService;
 
@@ -57,7 +64,7 @@ class CocktailServiceTest {
     mockCocktail.setId(1L);
     mockCocktail.setName("Mojito");
     mockCocktail.setCategory(mockCategory);
-    mockCocktail.setIngredients(new HashSet<>(List.of(mockIngredient)));
+    mockCocktail.setIngredients(new ArrayList<>());
   }
 
   @Test
@@ -67,7 +74,7 @@ class CocktailServiceTest {
     cocktail2.setId(2L);
     cocktail2.setName("Margarita");
     cocktail2.setCategory(mockCategory);
-    cocktail2.setIngredients(new HashSet<>());
+    cocktail2.setIngredients(new ArrayList<>());
 
     List<Cocktail> cocktails = List.of(mockCocktail, cocktail2);
 
@@ -116,15 +123,18 @@ class CocktailServiceTest {
   }
 
   @Test
-  @DisplayName("createCocktail should resolve category and save cocktail")
+  @DisplayName("createCocktail should resolve category and ingredients, save cocktail")
   void testCreateCocktail_Success() {
     List<SizePriceRequest> sizes =
         List.of(new SizePriceRequest(Size.S, new BigDecimal("5.00")));
+    List<CocktailIngredientRequest> ingredients =
+        List.of(new CocktailIngredientRequest("Lime Juice", "45ml"));
     CocktailRequest request =
-        new CocktailRequest("Mojito", "A classic mojito", "img.jpg", true, 1L, new HashSet<>(List.of(1L)), sizes);
+        new CocktailRequest("Mojito", "A classic mojito", true, 1L, ingredients, "", sizes);
 
     when(categoryRepository.findById(1L)).thenReturn(Optional.of(mockCategory));
-    when(ingredientRepository.findAllById(anyCollection())).thenReturn(List.of(mockIngredient));
+    when(ingredientRepository.findByNameIgnoreCase("Lime Juice"))
+        .thenReturn(Optional.of(mockIngredient));
     when(cocktailRepository.save(any(Cocktail.class))).thenReturn(mockCocktail);
 
     CocktailResponse response = cocktailService.createCocktail(request);
@@ -132,6 +142,34 @@ class CocktailServiceTest {
     assertNotNull(response);
     assertEquals("Mojito", response.name());
     verify(categoryRepository).findById(1L);
+    verify(ingredientRepository).findByNameIgnoreCase("Lime Juice");
+    verify(cocktailRepository).save(any(Cocktail.class));
+  }
+
+  @Test
+  @DisplayName("createCocktail should create ingredient if not found")
+  void testCreateCocktail_CreateNewIngredient() {
+    List<SizePriceRequest> sizes =
+        List.of(new SizePriceRequest(Size.S, new BigDecimal("5.00")));
+    List<CocktailIngredientRequest> ingredients =
+        List.of(new CocktailIngredientRequest("New Ingredient", "50ml"));
+    CocktailRequest request =
+        new CocktailRequest("Mojito", "A classic mojito", true, 1L, ingredients, "", sizes);
+
+    Ingredient newIng = new Ingredient();
+    newIng.setId(2L);
+    newIng.setName("New Ingredient");
+
+    when(categoryRepository.findById(1L)).thenReturn(Optional.of(mockCategory));
+    when(ingredientRepository.findByNameIgnoreCase("New Ingredient"))
+        .thenReturn(Optional.empty());
+    when(ingredientRepository.save(any(Ingredient.class))).thenReturn(newIng);
+    when(cocktailRepository.save(any(Cocktail.class))).thenReturn(mockCocktail);
+
+    CocktailResponse response = cocktailService.createCocktail(request);
+
+    assertNotNull(response);
+    verify(ingredientRepository).save(any(Ingredient.class));
     verify(cocktailRepository).save(any(Cocktail.class));
   }
 
@@ -141,7 +179,7 @@ class CocktailServiceTest {
     List<SizePriceRequest> sizes =
         List.of(new SizePriceRequest(Size.S, new BigDecimal("5.00")));
     CocktailRequest request =
-        new CocktailRequest("Mojito", "A classic mojito", "img.jpg", true, 999L, new HashSet<>(List.of(1L)), sizes);
+        new CocktailRequest("Mojito", "A classic mojito", true, 999L, List.of(), "", sizes);
 
     when(categoryRepository.findById(999L)).thenReturn(Optional.empty());
 
@@ -154,7 +192,7 @@ class CocktailServiceTest {
   void testCreateCocktail_NoIngredients() {
     List<SizePriceRequest> sizes =
         List.of(new SizePriceRequest(Size.S, new BigDecimal("5.00")));
-    CocktailRequest request = new CocktailRequest("Mojito", "A classic mojito", "img.jpg", true, 1L, null, sizes);
+    CocktailRequest request = new CocktailRequest("Mojito", "A classic mojito", true, 1L, null, "", sizes);
 
     when(categoryRepository.findById(1L)).thenReturn(Optional.of(mockCategory));
     when(cocktailRepository.save(any(Cocktail.class))).thenReturn(mockCocktail);
@@ -167,16 +205,37 @@ class CocktailServiceTest {
   }
 
   @Test
+  @DisplayName("createCocktail should handle image download successfully")
+  void testCreateCocktail_WithImageUrl() throws Exception {
+    List<SizePriceRequest> sizes =
+        List.of(new SizePriceRequest(Size.S, new BigDecimal("5.00")));
+    CocktailRequest request = new CocktailRequest("Mojito", "A classic mojito", true, 1L, List.of(), "https://example.com/image.jpg", sizes);
+
+    when(categoryRepository.findById(1L)).thenReturn(Optional.of(mockCategory));
+    when(cocktailRepository.save(any(Cocktail.class))).thenReturn(mockCocktail);
+    when(theCocktailDbClient.downloadImage("https://example.com/image.jpg"))
+        .thenReturn(new ImageData(new byte[]{1, 2, 3}, "image/jpeg"));
+
+    CocktailResponse response = cocktailService.createCocktail(request);
+
+    assertNotNull(response);
+    verify(theCocktailDbClient).downloadImage("https://example.com/image.jpg");
+  }
+
+  @Test
   @DisplayName("updateCocktail should update and resolve category")
   void testUpdateCocktail_Success() {
     List<SizePriceRequest> sizes =
         List.of(new SizePriceRequest(Size.S, new BigDecimal("5.00")));
+    List<CocktailIngredientRequest> ingredients =
+        List.of(new CocktailIngredientRequest("Lime Juice", "45ml"));
     CocktailRequest request =
-        new CocktailRequest("Updated Mojito", "Updated description", "img.jpg", true, 1L, new HashSet<>(List.of(1L)), sizes);
+        new CocktailRequest("Updated Mojito", "Updated description", true, 1L, ingredients, "", sizes);
 
     when(cocktailRepository.findById(1L)).thenReturn(Optional.of(mockCocktail));
     when(categoryRepository.findById(1L)).thenReturn(Optional.of(mockCategory));
-    when(ingredientRepository.findAllById(anyCollection())).thenReturn(List.of(mockIngredient));
+    when(ingredientRepository.findByNameIgnoreCase("Lime Juice"))
+        .thenReturn(Optional.of(mockIngredient));
     when(cocktailRepository.save(any(Cocktail.class))).thenReturn(mockCocktail);
 
     CocktailResponse response = cocktailService.updateCocktail(1L, request);
@@ -193,7 +252,7 @@ class CocktailServiceTest {
     List<SizePriceRequest> sizes =
         List.of(new SizePriceRequest(Size.S, new BigDecimal("5.00")));
     CocktailRequest request =
-        new CocktailRequest("Mojito", "Description", "img.jpg", true, 1L, new HashSet<>(List.of(1L)), sizes);
+        new CocktailRequest("Mojito", "Description", true, 1L, List.of(), "", sizes);
 
     when(cocktailRepository.findById(999L)).thenReturn(Optional.empty());
 
@@ -207,7 +266,7 @@ class CocktailServiceTest {
     List<SizePriceRequest> sizes =
         List.of(new SizePriceRequest(Size.S, new BigDecimal("5.00")));
     CocktailRequest request =
-        new CocktailRequest("Mojito", "Description", "img.jpg", true, 999L, new HashSet<>(List.of(1L)), sizes);
+        new CocktailRequest("Mojito", "Description", true, 999L, List.of(), "", sizes);
 
     when(cocktailRepository.findById(1L)).thenReturn(Optional.of(mockCocktail));
     when(categoryRepository.findById(999L)).thenReturn(Optional.empty());

@@ -48,6 +48,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/orders/*").permitAll()
                 .requestMatchers("/api/categories/**", "/api/ingredients/**", "/api/cocktails/**").hasRole("BARMAKER")
                 .requestMatchers(HttpMethod.PATCH, "/api/orders/**").hasRole("BARMAKER")
+                .requestMatchers("/api/external/**").hasRole("BARMAKER")
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

@@ -1,7 +1,9 @@
 package fr.lebarapp.api.mapper;
 
 import fr.lebarapp.api.domain.Cocktail;
+import fr.lebarapp.api.domain.CocktailIngredient;
 import fr.lebarapp.api.domain.CocktailSize;
+import fr.lebarapp.api.dto.CocktailIngredientResponse;
 import fr.lebarapp.api.dto.CocktailRequest;
 import fr.lebarapp.api.dto.CocktailResponse;
 import fr.lebarapp.api.dto.SizePriceRequest;
@@ -19,7 +21,6 @@ public class CocktailMapper {
         Cocktail cocktail = new Cocktail();
         cocktail.setName(request.name());
         cocktail.setDescription(request.description());
-        cocktail.setImageUrl(request.imageUrl());
         cocktail.setAvailable(request.available());
         return cocktail;
     }
@@ -27,28 +28,29 @@ public class CocktailMapper {
     public static void updateEntity(CocktailRequest request, Cocktail cocktail) {
         cocktail.setName(request.name());
         cocktail.setDescription(request.description());
-        cocktail.setImageUrl(request.imageUrl());
         cocktail.setAvailable(request.available());
     }
 
     public static CocktailResponse toResponse(Cocktail cocktail) {
-        List<String> ingredientNames = cocktail.getIngredients().stream()
-            .map(ing -> ing.getName())
+        List<CocktailIngredientResponse> ingredientResponses = cocktail.getIngredients().stream()
+            .map(ci -> new CocktailIngredientResponse(ci.getIngredient().getName(), ci.getMeasure()))
             .collect(Collectors.toList());
 
         List<SizePriceResponse> sizePrices = cocktail.getSizes().stream()
             .map(cs -> new SizePriceResponse(cs.getSize(), cs.getPrice()))
             .collect(Collectors.toList());
 
+        String imageUrl = cocktail.getId() != null ? "/api/cocktails/" + cocktail.getId() + "/image" : null;
+
         return new CocktailResponse(
             cocktail.getId(),
             cocktail.getName(),
             cocktail.getDescription(),
-            cocktail.getImageUrl(),
+            imageUrl,
             cocktail.isAvailable(),
             cocktail.getCategory().getId(),
             cocktail.getCategory().getName(),
-            ingredientNames,
+            ingredientResponses,
             sizePrices
         );
     }
