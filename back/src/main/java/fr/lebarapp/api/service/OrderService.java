@@ -80,6 +80,7 @@ public class OrderService {
         return OrderMapper.toResponse(order);
     }
 
+    @Transactional(readOnly = true)
     public List<OrderResponse> getQueue() {
         List<OrderStatus> statuses = Arrays.asList(OrderStatus.COMMANDEE, OrderStatus.EN_PREPARATION);
         return orderRepository.findByStatusInOrderByCreatedAtAsc(statuses).stream()
@@ -87,6 +88,7 @@ public class OrderService {
             .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public OrderResponse getOrderById(Long id) {
         Order order = orderRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Commande introuvable avec l'ID: " + id));

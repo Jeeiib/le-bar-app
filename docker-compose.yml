@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: barapp
+      POSTGRES_USER: barapp
+      POSTGRES_PASSWORD: barapp
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U barapp"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  back:
+    build: ./back
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/barapp
+      SPRING_DATASOURCE_USERNAME: barapp
+      SPRING_DATASOURCE_PASSWORD: barapp
+      APP_JWT_SECRET: change-me-in-prod-please-1234567890-abcdefghijklmnop
+    ports:
+      - "8080:8080"
+
+volumes:
+  db-data:
