@@ -46,18 +46,21 @@ public class CocktailService {
         this.theCocktailDbClient = theCocktailDbClient;
     }
 
+    @Transactional(readOnly = true)
     public List<CocktailResponse> getAllCocktails() {
         return cocktailRepository.findAll().stream()
             .map(CocktailMapper::toResponse)
             .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<CocktailResponse> getCocktailsByCategory(Long categoryId) {
         return cocktailRepository.findByCategoryId(categoryId).stream()
             .map(CocktailMapper::toResponse)
             .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public CocktailResponse getCocktailById(Long id) {
         Cocktail cocktail = cocktailRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Cocktail introuvable avec l'ID: " + id));

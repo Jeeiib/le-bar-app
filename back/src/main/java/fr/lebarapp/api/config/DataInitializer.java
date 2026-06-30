@@ -91,7 +91,7 @@ public class DataInitializer implements CommandLineRunner {
             logger.info("12 tables de bar créées");
 
             // Créer 4 catégories
-            String[] categoryNames = {"Vodka", "Rhum", "Whisky", "Gin"};
+            String[] categoryNames = {"Signatures", "Classiques", "Sans alcool", "Softs"};
             for (String name : categoryNames) {
                 Category cat = new Category();
                 cat.setName(name);
@@ -100,11 +100,11 @@ public class DataInitializer implements CommandLineRunner {
             logger.info("4 catégories créées");
 
             // Charger cocktails depuis TheCocktailDB
-            String[] cocktailNames = {"Margarita", "Mojito", "Daiquiri", "Cosmopolitan", "Martini", "Piña Colada"};
+            String[] cocktailNames = {"Margarita", "Mojito", "Daiquiri", "Cosmopolitan", "Negroni",
+                "Mai Tai", "Pina Colada", "Whiskey Sour", "Old Fashioned", "Moscow Mule", "Caipirinha", "Manhattan"};
             int createdCount = 0;
 
             for (String cocktailName : cocktailNames) {
-                if (createdCount >= 2) break;
                 try {
                     List<ExternalCocktailDto> results = theCocktailDbClient.search(cocktailName);
                     if (!results.isEmpty()) {
@@ -115,7 +115,7 @@ public class DataInitializer implements CommandLineRunner {
                         cocktail.setAvailable(true);
 
                         // Assigner une catégorie
-                        Category category = categoryRepository.findAll().get(createdCount % 4);
+                        Category category = categoryRepository.findAll().get(createdCount % 2);
                         cocktail.setCategory(category);
 
                         // Ajouter les ingrédients
