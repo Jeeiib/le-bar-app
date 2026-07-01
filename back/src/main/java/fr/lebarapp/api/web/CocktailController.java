@@ -6,6 +6,7 @@ import fr.lebarapp.api.dto.CocktailResponse;
 import fr.lebarapp.api.repository.CocktailImageRepository;
 import fr.lebarapp.api.service.CocktailService;
 import jakarta.validation.Valid;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/cocktails")
 public class CocktailController {
+
+    // Image de repli (verre dessiné) servie quand un cocktail n'a pas de photo (ex: softs).
+    private static final String PLACEHOLDER_SVG =
+        "<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'>"
+        + "<rect width='400' height='300' fill='#f7f8fa'/>"
+        + "<g stroke='#16161d' stroke-width='8' fill='none' stroke-linecap='round' stroke-linejoin='round'>"
+        + "<path d='M150 115 L250 115 L200 170 Z'/>"
+        + "<line x1='200' y1='170' x2='200' y2='210'/>"
+        + "<line x1='170' y1='210' x2='230' y2='210'/>"
+        + "</g></svg>";
 
     private final CocktailService cocktailService;
     private final CocktailImageRepository cocktailImageRepository;
@@ -55,7 +66,9 @@ public class CocktailController {
         CocktailImage image = cocktailImageRepository.findByCocktailId(id)
             .orElse(null);
         if (image == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, "image/svg+xml")
+                .body(PLACEHOLDER_SVG.getBytes(StandardCharsets.UTF_8));
         }
         return ResponseEntity.ok()
             .header(HttpHeaders.CONTENT_TYPE, image.getContentType())

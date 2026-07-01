@@ -15,9 +15,11 @@ public class TheCocktailDbClient {
     private static final String BASE_URL = "https://www.thecocktaildb.com/api/json/v1/1";
 
     private final RestClient restClient;
+    private final FrenchTranslator translator;
 
-    public TheCocktailDbClient(RestClient.Builder restClientBuilder) {
+    public TheCocktailDbClient(RestClient.Builder restClientBuilder, FrenchTranslator translator) {
         this.restClient = restClientBuilder.baseUrl(BASE_URL).build();
+        this.translator = translator;
     }
 
     public List<ExternalCocktailDto> search(String name) {
@@ -37,17 +39,29 @@ public class TheCocktailDbClient {
             for (Map<String, Object> drink : drinks) {
                 String cocktailName = (String) drink.get("strDrink");
                 String category = (String) drink.get("strCategory");
-                String instructions = (String) drink.get("strInstructions");
+                // TheCocktailDB fournit déjà une recette en français (repli sur l'anglais)
+                String instructions = (String) drink.get("strInstructionsFR");
+                if (instructions == null || instructions.isBlank()) {
+                    instructions = (String) drink.get("strInstructions");
+                }
                 String imageUrl = (String) drink.get("strDrinkThumb");
 
                 List<ExternalIngredientDto> ingredients = new ArrayList<>();
+                java.util.Set<String> seenIngredients = new java.util.HashSet<>();
                 for (int i = 1; i <= 15; i++) {
                     String ingredientKey = "strIngredient" + i;
                     String measureKey = "strMeasure" + i;
                     String ingredientName = (String) drink.get(ingredientKey);
                     if (ingredientName != null && !ingredientName.trim().isEmpty()) {
                         String measure = (String) drink.get(measureKey);
-                        ingredients.add(new ExternalIngredientDto(ingredientName, measure));
+                        // Normalisation FR (ingrédient + mesure), repli en VO si non couvert
+                        String frName = translator.translateIngredient(ingredientName);
+                        // Dédoublonnage : deux ingrédients EN peuvent se traduire pareil en FR
+                        // (sinon violation de la contrainte unique cocktail+ingrédient en base)
+                        if (frName != null && seenIngredients.add(frName.toLowerCase())) {
+                            ingredients.add(new ExternalIngredientDto(
+                                frName, translator.translateMeasure(measure)));
+                        }
                     }
                 }
 
