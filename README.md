@@ -30,7 +30,7 @@ Tout se trouve dans le dossier `docs/` :
 
 ## Lancer le projet
 
-Pré-requis : **Docker** et **Docker Compose** (Docker Desktop sous Windows/Mac).
+Pré-requis : **Docker** et **Docker Compose**
 
 Depuis la racine du projet :
 
