@@ -4,13 +4,8 @@ import * as api from '@/api/client'
 import { useAuthStore } from '@/stores/auth'
 import type {
   Category,
-  Cocktail,
   CocktailRequest,
   CreateOrderRequest,
-  Order,
-  AuthResponse,
-  ExternalCocktail,
-  TableInfo,
 } from '@/types'
 
 // Mock fetch global

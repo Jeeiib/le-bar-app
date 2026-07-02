@@ -152,8 +152,6 @@ describe('UI store', () => {
     it('doit supprimer le bon toast parmi plusieurs', async () => {
       const uiStore = useUiStore()
       uiStore.toast('Toast 1', 'success')
-      const toast0 = uiStore.toasts[0]
-      const id1 = toast0 ? toast0.id : 0
 
       vi.advanceTimersByTime(1000)
 
