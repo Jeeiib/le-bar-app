@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.lebarapp.api.domain.OrderStatus;
 import fr.lebarapp.api.domain.Size;
-import fr.lebarapp.api.dto.OrderLineRequest;
+import fr.lebarapp.api.dto.OrderItemRequest;
 import fr.lebarapp.api.dto.OrderRequest;
 import fr.lebarapp.api.dto.OrderResponse;
 import fr.lebarapp.api.error.BusinessException;
@@ -58,7 +58,7 @@ class OrderControllerTest {
         OrderRequest request = new OrderRequest(
             1L,
             "Customer",
-            List.of(new OrderLineRequest(1L, Size.S))
+            List.of(new OrderItemRequest(1L, Size.S))
         );
 
         mockMvc.perform(post("/api/orders")
@@ -160,7 +160,7 @@ class OrderControllerTest {
         OrderRequest request = new OrderRequest(
             null,
             "Customer",
-            List.of(new OrderLineRequest(1L, Size.S))
+            List.of(new OrderItemRequest(1L, Size.S))
         );
 
         mockMvc.perform(post("/api/orders")
@@ -177,7 +177,7 @@ class OrderControllerTest {
         OrderRequest request = new OrderRequest(
             99L,
             "Customer",
-            List.of(new OrderLineRequest(1L, Size.S))
+            List.of(new OrderItemRequest(1L, Size.S))
         );
 
         mockMvc.perform(post("/api/orders")
@@ -194,7 +194,7 @@ class OrderControllerTest {
         OrderRequest request = new OrderRequest(
             1L,
             "Customer",
-            List.of(new OrderLineRequest(99L, Size.S))
+            List.of(new OrderItemRequest(99L, Size.S))
         );
 
         mockMvc.perform(post("/api/orders")
@@ -211,7 +211,7 @@ class OrderControllerTest {
         OrderRequest request = new OrderRequest(
             1L,
             "Customer",
-            List.of(new OrderLineRequest(1L, Size.S))
+            List.of(new OrderItemRequest(1L, Size.S))
         );
 
         mockMvc.perform(post("/api/orders")

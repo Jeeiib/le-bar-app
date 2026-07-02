@@ -11,5 +11,5 @@ public record OrderRequest(
     String customerName,
     @NotEmpty(message = "Au moins un article doit être commandé")
     @Valid
-    List<OrderLineRequest> items
+    List<OrderItemRequest> items
 ) {}

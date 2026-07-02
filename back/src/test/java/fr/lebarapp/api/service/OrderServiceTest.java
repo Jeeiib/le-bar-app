@@ -5,7 +5,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import fr.lebarapp.api.domain.*;
-import fr.lebarapp.api.dto.OrderLineRequest;
+import fr.lebarapp.api.dto.OrderItemRequest;
 import fr.lebarapp.api.dto.OrderRequest;
 import fr.lebarapp.api.dto.OrderResponse;
 import fr.lebarapp.api.error.BusinessException;
@@ -71,7 +71,7 @@ class OrderServiceTest {
   @Test
   @DisplayName("createOrder should create order with snapshot price")
   void testCreateOrder_Success() {
-    OrderLineRequest lineRequest = new OrderLineRequest(1L, Size.S);
+    OrderItemRequest lineRequest = new OrderItemRequest(1L, Size.S);
     OrderRequest request = new OrderRequest(1L, "John", List.of(lineRequest));
 
     when(barTableRepository.findById(1L)).thenReturn(Optional.of(mockTable));
@@ -93,7 +93,7 @@ class OrderServiceTest {
   @Test
   @DisplayName("createOrder should throw ResourceNotFoundException when table not found")
   void testCreateOrder_TableNotFound() {
-    OrderLineRequest lineRequest = new OrderLineRequest(1L, Size.S);
+    OrderItemRequest lineRequest = new OrderItemRequest(1L, Size.S);
     OrderRequest request = new OrderRequest(999L, "John", List.of(lineRequest));
 
     when(barTableRepository.findById(999L)).thenReturn(Optional.empty());
@@ -104,7 +104,7 @@ class OrderServiceTest {
   @Test
   @DisplayName("createOrder should throw ResourceNotFoundException when cocktail not found")
   void testCreateOrder_CocktailNotFound() {
-    OrderLineRequest lineRequest = new OrderLineRequest(999L, Size.S);
+    OrderItemRequest lineRequest = new OrderItemRequest(999L, Size.S);
     OrderRequest request = new OrderRequest(1L, "John", List.of(lineRequest));
 
     when(barTableRepository.findById(1L)).thenReturn(Optional.of(mockTable));
@@ -116,7 +116,7 @@ class OrderServiceTest {
   @Test
   @DisplayName("createOrder should throw BusinessException when size not available")
   void testCreateOrder_SizeNotAvailable() {
-    OrderLineRequest lineRequest = new OrderLineRequest(1L, Size.L);
+    OrderItemRequest lineRequest = new OrderItemRequest(1L, Size.L);
     OrderRequest request = new OrderRequest(1L, "John", List.of(lineRequest));
 
     when(barTableRepository.findById(1L)).thenReturn(Optional.of(mockTable));

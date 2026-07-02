@@ -12,6 +12,7 @@
     <!-- Contenu -->
     <div class="container">
       <h2 class="title">{{ cocktail?.name }}</h2>
+      <p v-if="cocktail?.description" class="description">{{ cocktail.description }}</p>
 
       <!-- Ingrédients -->
       <label class="label-in">Ingrédients</label>

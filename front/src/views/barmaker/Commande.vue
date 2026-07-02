@@ -57,12 +57,15 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import * as api from '@/api/client'
 import { sizeCl } from '@/utils/sizes'
-import type { Order, OrderStatus } from '@/types'
+import { useUiStore } from '@/stores/ui'
+import type { Order } from '@/types'
+import { statusLabel, statusClass } from '@/utils/orderStatus'
 import BarmakerLayout from '@/components/BarmakerLayout.vue'
 import PrepStepper from '@/components/PrepStepper.vue'
 
 const router = useRouter()
 const route = useRoute()
+const ui = useUiStore()
 const order = ref<Order>({
   id: 0,
   tableId: 0,
@@ -73,7 +76,6 @@ const order = ref<Order>({
   items: [],
   total: 0,
 })
-const isLoading = ref(false)
 const isAdvancing = ref(false)
 
 const orderId = computed(() => {
@@ -87,46 +89,18 @@ const isOrderComplete = computed(() => {
   return order.value.items.length > 0 && order.value.items.every((i) => i.preparationStatus === 'TERMINEE')
 })
 
-const statusLabel = (status: OrderStatus): string => {
-  switch (status) {
-    case 'COMMANDEE':
-      return 'Commandée'
-    case 'EN_PREPARATION':
-      return 'En préparation'
-    case 'TERMINEE':
-      return 'Terminée'
-    default:
-      return status
-  }
-}
-
-const statusClass = (status: OrderStatus): string => {
-  switch (status) {
-    case 'COMMANDEE':
-      return 'sb-new'
-    case 'EN_PREPARATION':
-      return 'sb-prep'
-    case 'TERMINEE':
-      return 'sb-done'
-    default:
-      return ''
-  }
-}
-
 const goBack = () => {
   router.push('/barmaker/commandes')
 }
 
 const loadOrder = async () => {
-  isLoading.value = true
   try {
     if (orderId.value > 0) {
       order.value = await api.getOrder(orderId.value)
     }
   } catch (error) {
     console.error('Erreur lors du chargement de la commande:', error)
-  } finally {
-    isLoading.value = false
+    ui.toast('Erreur lors du chargement de la commande', 'error')
   }
 }
 

@@ -7,7 +7,6 @@ import fr.lebarapp.api.error.ResourceNotFoundException;
 import fr.lebarapp.api.mapper.IngredientMapper;
 import fr.lebarapp.api.repository.IngredientRepository;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +19,14 @@ public class IngredientService {
         this.ingredientRepository = ingredientRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<IngredientResponse> getAllIngredients() {
         return ingredientRepository.findAll().stream()
             .map(IngredientMapper::toResponse)
-            .collect(Collectors.toList());
+            .toList();
     }
 
+    @Transactional(readOnly = true)
     public IngredientResponse getIngredientById(Long id) {
         Ingredient ingredient = ingredientRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Ingrédient introuvable avec l'ID: " + id));
@@ -52,6 +53,13 @@ public class IngredientService {
     public void deleteIngredient(Long id) {
         Ingredient ingredient = ingredientRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Ingrédient introuvable avec l'ID: " + id));
-        ingredientRepository.delete(ingredient);
+        try {
+            ingredientRepository.delete(ingredient);
+            ingredientRepository.flush();
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            // L'ingrédient est référencé par des cocktails : on bloque proprement
+            throw new fr.lebarapp.api.error.BusinessException(
+                "Impossible de supprimer cet ingrédient : il figure dans des cocktails.");
+        }
     }
 }

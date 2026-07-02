@@ -6,7 +6,6 @@ import fr.lebarapp.api.dto.OrderItemResponse;
 import fr.lebarapp.api.dto.OrderResponse;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class OrderMapper {
 
@@ -17,7 +16,7 @@ public class OrderMapper {
     public static OrderResponse toResponse(Order order) {
         List<OrderItemResponse> itemResponses = order.getItems().stream()
             .map(OrderMapper::toItemResponse)
-            .collect(Collectors.toList());
+            .toList();
 
         BigDecimal total = order.getItems().stream()
             .map(OrderItem::getUnitPrice)
