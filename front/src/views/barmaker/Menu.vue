@@ -3,7 +3,7 @@
     <!-- En-tête -->
     <div class="carte-header">
       <h2>Ma carte</h2>
-      <router-link to="/barmaker/carte/nouveau" class="btn-new">
+      <router-link to="/barmaker/menu/new" class="btn-new">
         + Nouveau cocktail
       </router-link>
     </div>
@@ -60,7 +60,7 @@
 
         <!-- Actions -->
         <div class="macts">
-          <router-link :to="`/barmaker/carte/${cocktail.id}/edit`" class="btn-act" title="Éditer">
+          <router-link :to="`/barmaker/menu/${cocktail.id}/edit`" class="btn-act" title="Éditer">
             <Pencil :size="16" />
           </router-link>
           <button @click="deleteCocktail(cocktail.id)" class="btn-act" title="Supprimer">

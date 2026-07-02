@@ -29,7 +29,7 @@
             <span class="tsize">{{ item.size }} · {{ sizeCl(item.size) }}</span>
           </div>
           <button
-            v-if="item.preparationStatus !== 'TERMINEE'"
+            v-if="item.preparationStatus !== 'COMPLETED'"
             @click="advanceItemStep(item.id)"
             class="nextbtn"
             :disabled="isAdvancing"
@@ -73,7 +73,7 @@ const order = ref<Order>({
   tableId: 0,
   tableLabel: '',
   customerName: null,
-  status: 'COMMANDEE',
+  status: 'ORDERED',
   createdAt: new Date().toISOString(),
   items: [],
   total: 0,
@@ -88,11 +88,11 @@ const orderId = computed(() => {
 })
 
 const isOrderComplete = computed(() => {
-  return order.value.items.length > 0 && order.value.items.every((i) => i.preparationStatus === 'TERMINEE')
+  return order.value.items.length > 0 && order.value.items.every((i) => i.preparationStatus === 'COMPLETED')
 })
 
 const goBack = () => {
-  router.push('/barmaker/commandes')
+  router.push('/barmaker/orders')
 }
 
 const loadOrder = async () => {

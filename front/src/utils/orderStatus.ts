@@ -3,11 +3,11 @@ import type { OrderStatus } from '@/types'
 
 export function statusLabel(status: OrderStatus | undefined): string {
   switch (status) {
-    case 'COMMANDEE':
+    case 'ORDERED':
       return 'Commandée'
-    case 'EN_PREPARATION':
+    case 'IN_PREPARATION':
       return 'En préparation'
-    case 'TERMINEE':
+    case 'COMPLETED':
       return 'Terminée'
     default:
       return 'Statut inconnu'
@@ -16,11 +16,11 @@ export function statusLabel(status: OrderStatus | undefined): string {
 
 export function statusClass(status: OrderStatus | undefined): string {
   switch (status) {
-    case 'COMMANDEE':
+    case 'ORDERED':
       return 'sb-new'
-    case 'EN_PREPARATION':
+    case 'IN_PREPARATION':
       return 'sb-prep'
-    case 'TERMINEE':
+    case 'COMPLETED':
       return 'sb-done'
     default:
       return ''

@@ -44,5 +44,5 @@ public class OrderItem {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private PrepStatus preparationStatus = PrepStatus.PREPARATION_INGREDIENTS;
+    private PrepStatus preparationStatus = PrepStatus.INGREDIENTS;
 }

@@ -86,7 +86,7 @@ const ui = useUiStore()
 const isCommanding = ref(false)
 
 const goBack = () => {
-  router.push('/carte')
+  router.push('/menu')
 }
 
 const placeOrder = async () => {
@@ -108,7 +108,7 @@ const placeOrder = async () => {
     })
 
     cartStore.clear()
-    router.push(`/commande/${order.id}`)
+    router.push(`/order/${order.id}`)
   } catch (error) {
     ui.toast(error instanceof Error ? error.message : 'Erreur lors de la commande', 'error')
   } finally {

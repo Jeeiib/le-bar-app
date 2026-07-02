@@ -10,7 +10,7 @@ const router = createRouter({
     return savedPosition || { top: 0 }
   },
   routes: [
-    // Redirect racine vers table de démo
+    // Redirection racine vers la table de démo
     {
       path: '/',
       redirect: '/t/table-1',
@@ -21,36 +21,36 @@ const router = createRouter({
     // Accueil avec table
     {
       path: '/t/:qrSlug',
-      name: 'AccueilTable',
-      component: () => import('../views/client/AccueilTable.vue'),
+      name: 'TableWelcome',
+      component: () => import('../views/client/TableWelcome.vue'),
     },
 
     // Carte des cocktails
     {
-      path: '/carte',
-      name: 'Carte',
-      component: () => import('../views/client/Carte.vue'),
+      path: '/menu',
+      name: 'Menu',
+      component: () => import('../views/client/Menu.vue'),
     },
 
     // Fiche cocktail
     {
       path: '/cocktail/:id',
-      name: 'FicheCocktail',
-      component: () => import('../views/client/FicheCocktail.vue'),
+      name: 'CocktailDetail',
+      component: () => import('../views/client/CocktailDetail.vue'),
     },
 
     // Panier
     {
-      path: '/panier',
-      name: 'Panier',
-      component: () => import('../views/client/Panier.vue'),
+      path: '/cart',
+      name: 'Cart',
+      component: () => import('../views/client/Cart.vue'),
     },
 
     // Suivi commande
     {
-      path: '/commande/:id',
-      name: 'SuiviCommande',
-      component: () => import('../views/client/SuiviCommande.vue'),
+      path: '/order/:id',
+      name: 'OrderTracking',
+      component: () => import('../views/client/OrderTracking.vue'),
     },
 
     // === ROUTES BARMAKER ===
@@ -64,39 +64,39 @@ const router = createRouter({
 
     // File de commandes
     {
-      path: '/barmaker/commandes',
-      name: 'BarmakerCommandes',
-      component: () => import('../views/barmaker/Commandes.vue'),
+      path: '/barmaker/orders',
+      name: 'BarmakerOrders',
+      component: () => import('../views/barmaker/Orders.vue'),
       meta: { requiresAuth: true },
     },
 
     // Traitement commande
     {
-      path: '/barmaker/commandes/:id',
-      name: 'BarmakerCommande',
-      component: () => import('../views/barmaker/Commande.vue'),
+      path: '/barmaker/orders/:id',
+      name: 'BarmakerOrderDetail',
+      component: () => import('../views/barmaker/OrderDetail.vue'),
       meta: { requiresAuth: true },
     },
 
     // Gestion carte
     {
-      path: '/barmaker/carte',
-      name: 'BarmakerCarte',
-      component: () => import('../views/barmaker/Carte.vue'),
+      path: '/barmaker/menu',
+      name: 'BarmakerMenu',
+      component: () => import('../views/barmaker/Menu.vue'),
       meta: { requiresAuth: true },
     },
 
     // Nouveau cocktail
     {
-      path: '/barmaker/carte/nouveau',
-      name: 'BarmakerCocktailNouveau',
+      path: '/barmaker/menu/new',
+      name: 'BarmakerCocktailNew',
       component: () => import('../views/barmaker/CocktailForm.vue'),
       meta: { requiresAuth: true },
     },
 
     // Edit cocktail
     {
-      path: '/barmaker/carte/:id/edit',
+      path: '/barmaker/menu/:id/edit',
       name: 'BarmakerCocktailEdit',
       component: () => import('../views/barmaker/CocktailForm.vue'),
       meta: { requiresAuth: true },

@@ -213,7 +213,7 @@ CREATE TABLE public.order_items (
     unit_price numeric(6,2) NOT NULL,
     cocktail_id bigint NOT NULL,
     order_id bigint NOT NULL,
-    CONSTRAINT order_items_preparation_status_check CHECK (((preparation_status)::text = ANY ((ARRAY['PREPARATION_INGREDIENTS'::character varying, 'ASSEMBLAGE'::character varying, 'DRESSAGE'::character varying, 'TERMINEE'::character varying])::text[]))),
+    CONSTRAINT order_items_preparation_status_check CHECK (((preparation_status)::text = ANY ((ARRAY['INGREDIENTS'::character varying, 'ASSEMBLY'::character varying, 'GARNISH'::character varying, 'COMPLETED'::character varying])::text[]))),
     CONSTRAINT order_items_size_check CHECK (((size)::text = ANY ((ARRAY['S'::character varying, 'M'::character varying, 'L'::character varying])::text[])))
 );
 
@@ -242,7 +242,7 @@ CREATE TABLE public.orders (
     customer_name character varying(80),
     status character varying(255) NOT NULL,
     table_id bigint NOT NULL,
-    CONSTRAINT orders_status_check CHECK (((status)::text = ANY ((ARRAY['COMMANDEE'::character varying, 'EN_PREPARATION'::character varying, 'TERMINEE'::character varying])::text[])))
+    CONSTRAINT orders_status_check CHECK (((status)::text = ANY ((ARRAY['ORDERED'::character varying, 'IN_PREPARATION'::character varying, 'COMPLETED'::character varying])::text[])))
 );
 
 

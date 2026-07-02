@@ -4,16 +4,16 @@ import type { OrderStatus } from '@/types'
 
 describe('orderStatus utils', () => {
   describe('statusLabel', () => {
-    it('doit retourner "Commandée" pour COMMANDEE', () => {
-      expect(statusLabel('COMMANDEE')).toBe('Commandée')
+    it('doit retourner "Commandée" pour ORDERED', () => {
+      expect(statusLabel('ORDERED')).toBe('Commandée')
     })
 
-    it('doit retourner "En préparation" pour EN_PREPARATION', () => {
-      expect(statusLabel('EN_PREPARATION')).toBe('En préparation')
+    it('doit retourner "En préparation" pour IN_PREPARATION', () => {
+      expect(statusLabel('IN_PREPARATION')).toBe('En préparation')
     })
 
-    it('doit retourner "Terminée" pour TERMINEE', () => {
-      expect(statusLabel('TERMINEE')).toBe('Terminée')
+    it('doit retourner "Terminée" pour COMPLETED', () => {
+      expect(statusLabel('COMPLETED')).toBe('Terminée')
     })
 
     it('doit retourner "Statut inconnu" pour undefined', () => {
@@ -26,16 +26,16 @@ describe('orderStatus utils', () => {
   })
 
   describe('statusClass', () => {
-    it('doit retourner "sb-new" pour COMMANDEE', () => {
-      expect(statusClass('COMMANDEE')).toBe('sb-new')
+    it('doit retourner "sb-new" pour ORDERED', () => {
+      expect(statusClass('ORDERED')).toBe('sb-new')
     })
 
-    it('doit retourner "sb-prep" pour EN_PREPARATION', () => {
-      expect(statusClass('EN_PREPARATION')).toBe('sb-prep')
+    it('doit retourner "sb-prep" pour IN_PREPARATION', () => {
+      expect(statusClass('IN_PREPARATION')).toBe('sb-prep')
     })
 
-    it('doit retourner "sb-done" pour TERMINEE', () => {
-      expect(statusClass('TERMINEE')).toBe('sb-done')
+    it('doit retourner "sb-done" pour COMPLETED', () => {
+      expect(statusClass('COMPLETED')).toBe('sb-done')
     })
 
     it('doit retourner une chaîne vide pour undefined', () => {

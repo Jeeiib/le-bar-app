@@ -53,7 +53,7 @@ public class OrderService {
         Order order = new Order();
         order.setTable(table);
         order.setCustomerName(request.customerName());
-        order.setStatus(OrderStatus.COMMANDEE);
+        order.setStatus(OrderStatus.ORDERED);
 
         // Traiter les articles de commande
         for (var lineRequest : request.items()) {
@@ -72,7 +72,7 @@ public class OrderService {
             item.setCocktail(cocktail);
             item.setSize(lineRequest.size());
             item.setUnitPrice(priceInfo.getPrice()); // Snapshot du prix
-            item.setPreparationStatus(PrepStatus.PREPARATION_INGREDIENTS);
+            item.setPreparationStatus(PrepStatus.INGREDIENTS);
 
             order.getItems().add(item);
         }
@@ -83,7 +83,7 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public List<OrderResponse> getQueue() {
-        List<OrderStatus> statuses = Arrays.asList(OrderStatus.COMMANDEE, OrderStatus.EN_PREPARATION);
+        List<OrderStatus> statuses = Arrays.asList(OrderStatus.ORDERED, OrderStatus.IN_PREPARATION);
         return orderRepository.findByStatusInOrderByCreatedAtAsc(statuses).stream()
             .map(OrderMapper::toResponse)
             .toList();
@@ -111,7 +111,7 @@ public class OrderService {
 
         // Faire avancer l'étape
         PrepStatus currentStatus = item.getPreparationStatus();
-        if (currentStatus == PrepStatus.TERMINEE) {
+        if (currentStatus == PrepStatus.COMPLETED) {
             throw new BusinessException("L'étape de préparation est déjà terminée");
         }
 
@@ -127,10 +127,10 @@ public class OrderService {
 
     private PrepStatus getNextStatus(PrepStatus current) {
         return switch (current) {
-            case PREPARATION_INGREDIENTS -> PrepStatus.ASSEMBLAGE;
-            case ASSEMBLAGE -> PrepStatus.DRESSAGE;
-            case DRESSAGE -> PrepStatus.TERMINEE;
-            case TERMINEE -> PrepStatus.TERMINEE;
+            case INGREDIENTS -> PrepStatus.ASSEMBLY;
+            case ASSEMBLY -> PrepStatus.GARNISH;
+            case GARNISH -> PrepStatus.COMPLETED;
+            case COMPLETED -> PrepStatus.COMPLETED;
         };
     }
 
@@ -141,17 +141,17 @@ public class OrderService {
             return;
         }
 
-        // Si TOUS les items sont TERMINEE -> Order.status = TERMINEE
-        if (items.stream().allMatch(item -> item.getPreparationStatus() == PrepStatus.TERMINEE)) {
-            order.setStatus(OrderStatus.TERMINEE);
+        // Si TOUS les items sont COMPLETED -> Order.status = COMPLETED
+        if (items.stream().allMatch(item -> item.getPreparationStatus() == PrepStatus.COMPLETED)) {
+            order.setStatus(OrderStatus.COMPLETED);
         }
-        // Si AU MOINS un item a une étape différente de PREPARATION_INGREDIENTS -> EN_PREPARATION
-        else if (items.stream().anyMatch(item -> item.getPreparationStatus() != PrepStatus.PREPARATION_INGREDIENTS)) {
-            order.setStatus(OrderStatus.EN_PREPARATION);
+        // Si AU MOINS un item a une étape différente de INGREDIENTS -> IN_PREPARATION
+        else if (items.stream().anyMatch(item -> item.getPreparationStatus() != PrepStatus.INGREDIENTS)) {
+            order.setStatus(OrderStatus.IN_PREPARATION);
         }
-        // Sinon COMMANDEE (tous les items à PREPARATION_INGREDIENTS)
+        // Sinon ORDERED (tous les items à INGREDIENTS)
         else {
-            order.setStatus(OrderStatus.COMMANDEE);
+            order.setStatus(OrderStatus.ORDERED);
         }
     }
 }

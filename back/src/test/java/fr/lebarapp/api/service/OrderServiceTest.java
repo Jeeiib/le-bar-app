@@ -56,7 +56,7 @@ class OrderServiceTest {
     mockOrder = new Order();
     mockOrder.setId(1L);
     mockOrder.setTable(mockTable);
-    mockOrder.setStatus(OrderStatus.COMMANDEE);
+    mockOrder.setStatus(OrderStatus.ORDERED);
     mockOrder.setItems(new ArrayList<>());
 
     mockOrderItem = new OrderItem();
@@ -65,7 +65,7 @@ class OrderServiceTest {
     mockOrderItem.setCocktail(mockCocktail);
     mockOrderItem.setSize(Size.S);
     mockOrderItem.setUnitPrice(new BigDecimal("5.00"));
-    mockOrderItem.setPreparationStatus(PrepStatus.PREPARATION_INGREDIENTS);
+    mockOrderItem.setPreparationStatus(PrepStatus.INGREDIENTS);
   }
 
   @Test
@@ -86,7 +86,7 @@ class OrderServiceTest {
 
     assertNotNull(response);
     assertEquals("John", response.customerName());
-    assertEquals(OrderStatus.COMMANDEE, response.status());
+    assertEquals(OrderStatus.ORDERED, response.status());
     verify(orderRepository).save(any(Order.class));
   }
 
@@ -126,7 +126,7 @@ class OrderServiceTest {
   }
 
   @Test
-  @DisplayName("advanceItemPreparation should advance status from PREPARATION_INGREDIENTS to ASSEMBLAGE")
+  @DisplayName("advanceItemPreparation should advance status from INGREDIENTS to ASSEMBLY")
   void testAdvanceItemPreparation_FromPreparationToAssemblage() {
     mockOrder.getItems().add(mockOrderItem);
 
@@ -138,14 +138,14 @@ class OrderServiceTest {
     OrderResponse response = orderService.advanceItemPreparation(1L, 1L);
 
     assertNotNull(response);
-    assertEquals(PrepStatus.ASSEMBLAGE, mockOrderItem.getPreparationStatus());
+    assertEquals(PrepStatus.ASSEMBLY, mockOrderItem.getPreparationStatus());
     verify(orderItemRepository).save(mockOrderItem);
   }
 
   @Test
-  @DisplayName("advanceItemPreparation should throw BusinessException when item already TERMINEE")
+  @DisplayName("advanceItemPreparation should throw BusinessException when item already COMPLETED")
   void testAdvanceItemPreparation_AlreadyTerminee() {
-    mockOrderItem.setPreparationStatus(PrepStatus.TERMINEE);
+    mockOrderItem.setPreparationStatus(PrepStatus.COMPLETED);
     mockOrder.getItems().add(mockOrderItem);
 
     when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
@@ -187,19 +187,19 @@ class OrderServiceTest {
     when(orderRepository.save(any(Order.class))).thenReturn(mockOrder);
 
     orderService.advanceItemPreparation(1L, 1L);
-    assertEquals(PrepStatus.ASSEMBLAGE, mockOrderItem.getPreparationStatus());
+    assertEquals(PrepStatus.ASSEMBLY, mockOrderItem.getPreparationStatus());
 
     orderService.advanceItemPreparation(1L, 1L);
-    assertEquals(PrepStatus.DRESSAGE, mockOrderItem.getPreparationStatus());
+    assertEquals(PrepStatus.GARNISH, mockOrderItem.getPreparationStatus());
 
     orderService.advanceItemPreparation(1L, 1L);
-    assertEquals(PrepStatus.TERMINEE, mockOrderItem.getPreparationStatus());
+    assertEquals(PrepStatus.COMPLETED, mockOrderItem.getPreparationStatus());
   }
 
   @Test
-  @DisplayName("recalculateOrderStatus should set status to TERMINEE when all items are done")
+  @DisplayName("recalculateOrderStatus should set status to COMPLETED when all items are done")
   void testRecalculateOrderStatus_AllTerminee() {
-    // Advance from PREPARATION_INGREDIENTS -> ASSEMBLAGE -> DRESSAGE -> TERMINEE
+    // Advance from INGREDIENTS -> ASSEMBLY -> GARNISH -> COMPLETED
     mockOrder.getItems().add(mockOrderItem);
 
     when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
@@ -207,24 +207,24 @@ class OrderServiceTest {
     when(orderItemRepository.save(any(OrderItem.class))).thenReturn(mockOrderItem);
     when(orderRepository.save(any(Order.class))).thenReturn(mockOrder);
 
-    // First advance: PREPARATION_INGREDIENTS -> ASSEMBLAGE
+    // First advance: INGREDIENTS -> ASSEMBLY
     orderService.advanceItemPreparation(1L, 1L);
-    assertEquals(PrepStatus.ASSEMBLAGE, mockOrderItem.getPreparationStatus());
+    assertEquals(PrepStatus.ASSEMBLY, mockOrderItem.getPreparationStatus());
 
-    // Second advance: ASSEMBLAGE -> DRESSAGE
+    // Second advance: ASSEMBLY -> GARNISH
     orderService.advanceItemPreparation(1L, 1L);
-    assertEquals(PrepStatus.DRESSAGE, mockOrderItem.getPreparationStatus());
+    assertEquals(PrepStatus.GARNISH, mockOrderItem.getPreparationStatus());
 
-    // Third advance: DRESSAGE -> TERMINEE
+    // Third advance: GARNISH -> COMPLETED
     orderService.advanceItemPreparation(1L, 1L);
-    assertEquals(PrepStatus.TERMINEE, mockOrderItem.getPreparationStatus());
-    assertEquals(OrderStatus.TERMINEE, mockOrder.getStatus());
+    assertEquals(PrepStatus.COMPLETED, mockOrderItem.getPreparationStatus());
+    assertEquals(OrderStatus.COMPLETED, mockOrder.getStatus());
   }
 
   @Test
-  @DisplayName("recalculateOrderStatus should set status to EN_PREPARATION when at least one item advanced")
+  @DisplayName("recalculateOrderStatus should set status to IN_PREPARATION when at least one item advanced")
   void testRecalculateOrderStatus_AtLeastOneAdvanced() {
-    mockOrderItem.setPreparationStatus(PrepStatus.ASSEMBLAGE);
+    mockOrderItem.setPreparationStatus(PrepStatus.ASSEMBLY);
     mockOrder.getItems().add(mockOrderItem);
 
     when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
@@ -234,7 +234,7 @@ class OrderServiceTest {
 
     orderService.advanceItemPreparation(1L, 1L);
 
-    assertEquals(OrderStatus.EN_PREPARATION, mockOrder.getStatus());
+    assertEquals(OrderStatus.IN_PREPARATION, mockOrder.getStatus());
   }
 
   @Test
@@ -257,12 +257,12 @@ class OrderServiceTest {
   }
 
   @Test
-  @DisplayName("getQueue should return orders with COMMANDEE or EN_PREPARATION status")
+  @DisplayName("getQueue should return orders with ORDERED or IN_PREPARATION status")
   void testGetQueue_Success() {
     List<Order> queueOrders = List.of(mockOrder);
 
     when(orderRepository.findByStatusInOrderByCreatedAtAsc(
-            eq(Arrays.asList(OrderStatus.COMMANDEE, OrderStatus.EN_PREPARATION))))
+            eq(Arrays.asList(OrderStatus.ORDERED, OrderStatus.IN_PREPARATION))))
         .thenReturn(queueOrders);
 
     List<OrderResponse> response = orderService.getQueue();

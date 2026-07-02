@@ -10,16 +10,16 @@ Enum cocktail_size {
 }
 
 Enum order_status {
-  COMMANDEE
-  EN_PREPARATION
-  TERMINEE
+  ORDERED
+  IN_PREPARATION
+  COMPLETED
 }
 
 Enum prep_status {
-  PREPARATION_INGREDIENTS
-  ASSEMBLAGE
-  DRESSAGE
-  TERMINEE
+  INGREDIENTS
+  ASSEMBLY
+  GARNISH
+  COMPLETED
 }
 
 Table users {
@@ -87,7 +87,7 @@ Table orders {
   id integer [pk, increment]
   table_id integer [not null, ref: > bar_table.id]
   customer_name varchar(80)
-  status order_status [not null, default: 'COMMANDEE']
+  status order_status [not null, default: 'ORDERED']
   created_at timestamp [not null, default: `now()`]
 }
 
@@ -97,5 +97,5 @@ Table order_items {
   cocktail_id integer [not null, ref: > cocktails.id]
   size cocktail_size [not null]
   unit_price decimal(6,2) [not null]
-  preparation_status prep_status [not null, default: 'PREPARATION_INGREDIENTS']
+  preparation_status prep_status [not null, default: 'INGREDIENTS']
 }
