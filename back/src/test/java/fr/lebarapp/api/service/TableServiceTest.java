@@ -2,10 +2,13 @@ package fr.lebarapp.api.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import fr.lebarapp.api.domain.BarTable;
+import fr.lebarapp.api.dto.TableRequest;
 import fr.lebarapp.api.dto.TableResponse;
+import fr.lebarapp.api.error.BusinessException;
 import fr.lebarapp.api.error.ResourceNotFoundException;
 import fr.lebarapp.api.repository.BarTableRepository;
 import java.util.List;
@@ -68,5 +71,37 @@ class TableServiceTest {
         assertEquals("table-1", responses.get(0).qrSlug());
         assertEquals("Table 2", responses.get(1).label());
         assertEquals("table-2", responses.get(1).qrSlug());
+    }
+
+    @Test
+    void creationGenereLeSlugDepuisLeNom() {
+        when(barTableRepository.findByQrSlug("terrasse-1")).thenReturn(Optional.empty());
+        when(barTableRepository.save(any(BarTable.class))).thenAnswer(invocation -> {
+            BarTable saved = invocation.getArgument(0);
+            saved.setId(10L);
+            return saved;
+        });
+
+        TableResponse response = tableService.createTable(new TableRequest("Terrasse 1"));
+
+        assertEquals(10L, response.id());
+        assertEquals("Terrasse 1", response.label());
+        assertEquals("terrasse-1", response.qrSlug());
+    }
+
+    @Test
+    void creationRefuseeSiSlugDejaPris() {
+        BarTable existante = new BarTable();
+        existante.setQrSlug("terrasse-1");
+        when(barTableRepository.findByQrSlug("terrasse-1")).thenReturn(Optional.of(existante));
+
+        assertThrows(BusinessException.class,
+            () -> tableService.createTable(new TableRequest("Terrasse 1")));
+    }
+
+    @Test
+    void creationRefuseeSiNomSansCaractereValide() {
+        assertThrows(BusinessException.class,
+            () -> tableService.createTable(new TableRequest("!!!")));
     }
 }

@@ -8,6 +8,19 @@
       </button>
     </div>
 
+    <!-- Ajout d'une table : le QR est généré automatiquement à partir du nom -->
+    <div class="add-table">
+      <input
+        v-model="newLabel"
+        @keyup.enter="addTable"
+        class="add-field"
+        placeholder="Nom de la nouvelle table (ex : Terrasse 1)"
+      />
+      <button @click="addTable" class="btn-add" :disabled="isAdding || !newLabel.trim()">
+        {{ isAdding ? 'Ajout…' : '+ Ajouter la table' }}
+      </button>
+    </div>
+
     <!-- Skeleton au chargement -->
     <div v-if="loading" class="tables-grid">
       <div v-for="n in 6" :key="n" class="table-card skeleton">
@@ -22,7 +35,13 @@
       <div v-for="table in tables" :key="table.id" class="table-card">
         <div class="table-label">{{ table.label }}</div>
         <div class="qr-container">
-          <QrcodeVue :value="qrUrl(table.qrSlug)" :size="160" level="M" />
+          <QrcodeVue
+            :value="qrUrl(table.qrSlug)"
+            :size="160"
+            level="M"
+            foreground="#16161d"
+            background="#ffffff"
+          />
         </div>
         <div class="table-url">{{ qrUrl(table.qrSlug) }}</div>
       </div>
@@ -49,10 +68,31 @@ import type { TableInfo } from '@/types'
 const ui = useUiStore()
 const tables = ref<TableInfo[]>([])
 const loading = ref(true)
+const newLabel = ref('')
+const isAdding = ref(false)
 
 // Construit l'URL du QR code basée sur l'origin courant
 const qrUrl = (slug: string): string => {
   return `${window.location.origin}/t/${slug}`
+}
+
+// Ajoute une table puis l'affiche (avec son QR) sans recharger toute la page
+const addTable = async () => {
+  const label = newLabel.value.trim()
+  if (!label) {
+    return
+  }
+  isAdding.value = true
+  try {
+    const created = await api.createTable(label)
+    tables.value.push(created)
+    newLabel.value = ''
+    ui.toast('Table ajoutée', 'success')
+  } catch (error) {
+    ui.toast(error instanceof Error ? error.message : 'Création impossible', 'error')
+  } finally {
+    isAdding.value = false
+  }
 }
 
 // Lance l'impression
@@ -107,6 +147,57 @@ onMounted(async () => {
 
 .btn-print:hover {
   background-color: #e63d1f;
+}
+
+.add-table {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.add-field {
+  flex: 1;
+  max-width: 340px;
+  background: white;
+  border: 1px solid rgba(22, 22, 29, 0.1);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--encre);
+}
+
+.add-field::placeholder {
+  color: rgba(22, 22, 29, 0.45);
+}
+
+.add-field:focus {
+  outline: none;
+  border-color: var(--spritz);
+  box-shadow: 0 0 0 3px rgba(255, 77, 46, 0.1);
+}
+
+.btn-add {
+  background: var(--encre);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.btn-add:hover:not(:disabled) {
+  background-color: #0a0a10;
+}
+
+.btn-add:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .tables-grid {
@@ -202,12 +293,13 @@ onMounted(async () => {
 
 /* Impression */
 @media print {
-  /* Masquer la nav et les boutons */
+  /* Masquer la nav, les boutons et le formulaire d'ajout */
   .tables-header {
     display: none;
   }
 
-  .btn-print {
+  .btn-print,
+  .add-table {
     display: none;
   }
 
