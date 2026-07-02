@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -236,11 +237,13 @@ class CocktailControllerTest {
     }
 
     @Test
-    void getImageNotFound() throws Exception {
+    void getImagePlaceholderQuandPasDePhoto() throws Exception {
         when(cocktailImageRepository.findByCocktailId(99L))
             .thenReturn(java.util.Optional.empty());
 
+        // Pas de photo en base : l'endpoint renvoie le visuel de repli (SVG), jamais une image cassee
         mockMvc.perform(get("/api/cocktails/99/image"))
-            .andExpect(status().isNotFound());
+            .andExpect(status().isOk())
+            .andExpect(content().contentType("image/svg+xml"));
     }
 }
