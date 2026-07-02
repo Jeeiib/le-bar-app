@@ -37,4 +37,14 @@ export default defineConfigWithVueTs(
   },
 
   ...pluginOxlint.buildFromOxlintConfigFile('.oxlintrc.json'),
+
+  {
+    // Dans les tests, les acces aux tableaux sont proteges par des gardes de nullite
+    // (mode strict TypeScript) : on tolere donc expect sous condition.
+    name: 'app/test-overrides',
+    files: ['src/**/__tests__/*'],
+    rules: {
+      'vitest/no-conditional-expect': 'off',
+    },
+  },
 )

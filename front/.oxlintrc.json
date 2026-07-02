@@ -6,5 +6,9 @@
   },
   "categories": {
     "correctness": "error"
+  },
+  "rules": {
+    "vitest/no-conditional-expect": "off",
+    "vitest/require-mock-type-parameters": "off"
   }
 }
