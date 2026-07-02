@@ -10,6 +10,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// Logique métier des catégories de la carte : CRUD, avec suppression bloquée si des cocktails
+// y sont encore rattachés.
 @Service
 public class CategoryService {
 

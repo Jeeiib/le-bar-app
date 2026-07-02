@@ -11,6 +11,8 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+// Génère et vérifie les jetons JWT : signés avec une clé secrète (HMAC), ils contiennent
+// l'email et le rôle de l'utilisateur et expirent après un délai configuré.
 @Service
 public class JwtService {
 

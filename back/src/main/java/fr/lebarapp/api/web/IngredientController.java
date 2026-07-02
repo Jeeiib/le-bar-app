@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+// Endpoints des ingrédients : lecture publique, écritures réservées au barmaker.
 @RestController
 @RequestMapping("/api/ingredients")
 public class IngredientController {

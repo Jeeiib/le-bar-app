@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+// Endpoints publics d'authentification : inscription et connexion des barmakers, qui renvoient
+// un jeton JWT à présenter ensuite sur les endpoints protégés.
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {

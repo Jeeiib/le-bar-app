@@ -69,6 +69,8 @@
 </template>
 
 <script setup lang="ts">
+// Panier client : récapitulatif des verres, ajustement des quantités et envoi de la commande
+// (une ligne par unité pour que le barmaker suive chaque verre séparément).
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '@/stores/cart'

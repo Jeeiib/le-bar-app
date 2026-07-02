@@ -13,6 +13,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+// Lien entre un cocktail et un ingrédient, avec la mesure propre à la recette du bar
+// (ex : "5 cl"). Un même ingrédient ne peut figurer qu'une fois par cocktail (contrainte unique).
 @Entity
 @Table(name = "cocktail_ingredients", uniqueConstraints = @UniqueConstraint(columnNames = {"cocktail_id", "ingredient_id"}))
 @Getter

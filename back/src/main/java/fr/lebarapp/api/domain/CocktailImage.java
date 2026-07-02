@@ -12,6 +12,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+// Photo d'un cocktail stockée directement en base (octets), pour que l'application
+// reste autonome et fonctionne hors-ligne sans dépendre d'une URL externe.
 @Entity
 @Table(name = "cocktail_image")
 @Getter

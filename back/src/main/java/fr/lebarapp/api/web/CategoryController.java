@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+// Endpoints des catégories de la carte : lecture publique (côté client), création, modification
+// et suppression réservées au barmaker (voir les règles dans SecurityConfig).
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
+// Données reçues du barmaker pour créer ou modifier un cocktail de la carte.
 public record CocktailRequest(
     @NotBlank(message = "Le nom du cocktail ne peut pas être vide")
     String name,

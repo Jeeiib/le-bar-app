@@ -2,6 +2,7 @@ package fr.lebarapp.api.dto;
 
 import java.util.List;
 
+// Cocktail renvoyé par l'API : la carte lisible avec ses ingrédients, ses tailles et ses prix.
 public record CocktailResponse(
     Long id,
     String name,

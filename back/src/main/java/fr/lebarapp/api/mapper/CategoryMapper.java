@@ -4,6 +4,7 @@ import fr.lebarapp.api.domain.Category;
 import fr.lebarapp.api.dto.CategoryRequest;
 import fr.lebarapp.api.dto.CategoryResponse;
 
+// Convertit les catégories entre entités (base) et DTO (API), dans les deux sens.
 public class CategoryMapper {
 
     private CategoryMapper() {

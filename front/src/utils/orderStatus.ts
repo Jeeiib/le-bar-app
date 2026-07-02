@@ -1,3 +1,4 @@
+// Libellés et classes CSS d'affichage des statuts de commande, réutilisés côté client et barmaker.
 import type { OrderStatus } from '@/types'
 
 export function statusLabel(status: OrderStatus | undefined): string {

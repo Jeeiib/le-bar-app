@@ -10,6 +10,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// Logique métier des ingrédients : CRUD, avec suppression bloquée si l'ingrédient est encore
+// utilisé dans des cocktails.
 @Service
 public class IngredientService {
 

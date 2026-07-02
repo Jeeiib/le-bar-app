@@ -12,6 +12,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+// Filtre exécuté une fois par requête : si un jeton "Bearer" valide est présent, il authentifie
+// l'utilisateur (email + rôle) pour la suite du traitement ; sinon la requête continue en anonyme
+// et l'accès aux endpoints protégés sera refusé plus loin.
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 

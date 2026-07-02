@@ -30,6 +30,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+// Remplit la base au premier démarrage : barmaker de démonstration, tables, catégories et carte
+// (cocktails chargés depuis TheCocktailDB avec leur image, softs saisis à la main). Ne s'exécute
+// que si app.seed.enabled=true ET base vide ; en Docker les données viennent déjà de init.sql,
+// donc ce seed réseau est sauté.
 @Component
 public class DataInitializer implements CommandLineRunner {
 
