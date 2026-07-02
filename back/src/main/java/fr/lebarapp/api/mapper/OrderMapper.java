@@ -7,6 +7,7 @@ import fr.lebarapp.api.dto.OrderResponse;
 import java.math.BigDecimal;
 import java.util.List;
 
+// Convertit les commandes entité -> DTO pour les réponses de l'API.
 public class OrderMapper {
 
     private OrderMapper() {
