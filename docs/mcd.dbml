@@ -51,9 +51,15 @@ Table cocktails {
   id integer [pk, increment]
   name varchar(120) [not null]
   description text
-  image_url varchar(300)
-  is_available boolean [not null, default: true]
+  available boolean [not null, default: true]
   category_id integer [not null, ref: > categories.id]
+}
+
+Table cocktail_image {
+  id integer [pk, increment]
+  cocktail_id integer [unique, not null, ref: > cocktails.id, note: 'une image par cocktail']
+  content_type varchar(50) [not null, note: 'ex: image/jpeg']
+  data bytea [not null, note: 'octets de l image stockes en base']
 }
 
 Table ingredients {
@@ -62,10 +68,12 @@ Table ingredients {
 }
 
 Table cocktail_ingredients {
-  cocktail_id integer [ref: > cocktails.id]
-  ingredient_id integer [ref: > ingredients.id]
+  id integer [pk, increment]
+  cocktail_id integer [not null, ref: > cocktails.id]
+  ingredient_id integer [not null, ref: > ingredients.id]
+  measure varchar(60) [note: 'quantite propre au bar, ex: 5 cl']
   indexes {
-    (cocktail_id, ingredient_id) [pk]
+    (cocktail_id, ingredient_id) [unique]
   }
 }
 
