@@ -63,7 +63,7 @@ import BarmakerLayout from '@/components/BarmakerLayout.vue'
 
 const router = useRouter()
 const orders = ref<Order[]>([])
-const selectedTab = ref<OrderStatus>('COMMANDEE')
+const selectedTab = ref<OrderStatus>('ORDERED')
 let pollInterval: number | null = null
 
 interface TabConfig {
@@ -72,8 +72,8 @@ interface TabConfig {
 }
 
 const tabs: TabConfig[] = [
-  { value: 'COMMANDEE', label: 'À traiter' },
-  { value: 'EN_PREPARATION', label: 'En cours' },
+  { value: 'ORDERED', label: 'À traiter' },
+  { value: 'IN_PREPARATION', label: 'En cours' },
 ]
 
 const getTabCount = (status: OrderStatus): number => {
@@ -85,13 +85,13 @@ const filteredOrders = computed(() => {
 })
 
 const emptyMessage = computed(() =>
-  selectedTab.value === 'COMMANDEE'
+  selectedTab.value === 'ORDERED'
     ? 'Aucune commande à traiter pour le moment.'
     : 'Aucune commande en préparation.'
 )
 
 const newOrdersCount = computed(
-  () => orders.value.filter((o) => o.status === 'COMMANDEE').length
+  () => orders.value.filter((o) => o.status === 'ORDERED').length
 )
 
 const formatRelativeTime = (isoDate?: string): string => {
@@ -115,7 +115,7 @@ const formatRelativeTime = (isoDate?: string): string => {
 }
 
 const goToOrder = (orderId: number): void => {
-  router.push(`/barmaker/commandes/${orderId}`)
+  router.push(`/barmaker/orders/${orderId}`)
 }
 
 const loadOrders = async () => {

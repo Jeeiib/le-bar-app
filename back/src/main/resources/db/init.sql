@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS orders (
     id            BIGSERIAL PRIMARY KEY,
     table_id      BIGINT      NOT NULL REFERENCES bar_table (id),
     customer_name VARCHAR(80),
-    status        VARCHAR(20) NOT NULL DEFAULT 'COMMANDEE',
+    status        VARCHAR(20) NOT NULL DEFAULT 'ORDERED',
     created_at    TIMESTAMP   NOT NULL DEFAULT now()
 );
 
@@ -79,5 +79,5 @@ CREATE TABLE IF NOT EXISTS order_items (
     cocktail_id        BIGINT       NOT NULL REFERENCES cocktails (id),
     size               VARCHAR(5)   NOT NULL,
     unit_price         NUMERIC(6,2) NOT NULL,
-    preparation_status VARCHAR(30)  NOT NULL DEFAULT 'PREPARATION_INGREDIENTS'
+    preparation_status VARCHAR(30)  NOT NULL DEFAULT 'INGREDIENTS'
 );

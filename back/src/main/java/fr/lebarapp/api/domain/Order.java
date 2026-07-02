@@ -42,7 +42,7 @@ public class Order {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private OrderStatus status = OrderStatus.COMMANDEE;
+    private OrderStatus status = OrderStatus.ORDERED;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

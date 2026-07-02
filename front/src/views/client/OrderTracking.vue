@@ -36,7 +36,7 @@
             <span class="item-name">{{ item.cocktailName }}</span>
           </div>
           <span
-            v-if="item.preparationStatus === 'TERMINEE'"
+            v-if="item.preparationStatus === 'COMPLETED'"
             class="item-badge ready"
           >
             <span class="badge-dot"></span>
@@ -86,7 +86,7 @@ const loadOrder = async (orderId: number) => {
     order.value = await api.getOrder(orderId)
 
     // Arrêter le polling si la commande est terminée
-    if (order.value.status === 'TERMINEE' && pollInterval.value) {
+    if (order.value.status === 'COMPLETED' && pollInterval.value) {
       clearInterval(pollInterval.value)
       pollInterval.value = null
     }
@@ -97,7 +97,7 @@ const loadOrder = async (orderId: number) => {
 
 const countReady = computed(() => {
   if (!order.value) return 0
-  return order.value.items.filter((item) => item.preparationStatus === 'TERMINEE').length
+  return order.value.items.filter((item) => item.preparationStatus === 'COMPLETED').length
 })
 
 const getCocktailImage = (cocktailId: number) => {

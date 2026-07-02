@@ -23,7 +23,7 @@
         />
       </div>
 
-      <button class="btn" @click="goToCarte">Voir la carte</button>
+      <button class="btn" @click="goToMenu">Voir la carte</button>
 
       <p class="footnote">Sans compte · commande à ta table</p>
     </div>
@@ -60,8 +60,8 @@ onMounted(async () => {
   }
 })
 
-const goToCarte = () => {
-  router.push('/carte')
+const goToMenu = () => {
+  router.push('/menu')
 }
 </script>
 

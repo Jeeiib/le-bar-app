@@ -5,16 +5,16 @@
       <div class="b">LE BAR'APP</div>
       <nav class="nav-links">
         <router-link
-          to="/barmaker/commandes"
+          to="/barmaker/orders"
           class="nav-link"
-          :class="{ on: isActive('/barmaker/commandes') }"
+          :class="{ on: isActive('/barmaker/orders') }"
         >
           Commandes
         </router-link>
         <router-link
-          to="/barmaker/carte"
+          to="/barmaker/menu"
           class="nav-link"
-          :class="{ on: isActive('/barmaker/carte') }"
+          :class="{ on: isActive('/barmaker/menu') }"
         >
           Ma carte
         </router-link>

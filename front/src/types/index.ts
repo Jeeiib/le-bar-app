@@ -2,10 +2,10 @@
 export type Size = 'S' | 'M' | 'L'
 
 // Statuts de commande
-export type OrderStatus = 'COMMANDEE' | 'EN_PREPARATION' | 'TERMINEE'
+export type OrderStatus = 'ORDERED' | 'IN_PREPARATION' | 'COMPLETED'
 
 // Statuts de préparation des items
-export type PrepStatus = 'PREPARATION_INGREDIENTS' | 'ASSEMBLAGE' | 'DRESSAGE' | 'TERMINEE'
+export type PrepStatus = 'INGREDIENTS' | 'ASSEMBLY' | 'GARNISH' | 'COMPLETED'
 
 // Catégorie de cocktails
 export interface Category {

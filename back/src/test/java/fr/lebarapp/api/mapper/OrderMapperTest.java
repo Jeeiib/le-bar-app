@@ -22,7 +22,7 @@ class OrderMapperTest {
     mockOrder = new Order();
     mockOrder.setId(1L);
     mockOrder.setCustomerName("John Doe");
-    mockOrder.setStatus(OrderStatus.COMMANDEE);
+    mockOrder.setStatus(OrderStatus.ORDERED);
     mockOrder.setItems(new ArrayList<>());
 
     BarTable table = new BarTable();
@@ -38,7 +38,7 @@ class OrderMapperTest {
     item.setId(1L);
     item.setSize(Size.S);
     item.setUnitPrice(new BigDecimal("5.00"));
-    item.setPreparationStatus(PrepStatus.PREPARATION_INGREDIENTS);
+    item.setPreparationStatus(PrepStatus.INGREDIENTS);
 
     Cocktail cocktail = new Cocktail();
     cocktail.setId(1L);
@@ -53,7 +53,7 @@ class OrderMapperTest {
     assertNotNull(response);
     assertEquals(1L, response.id());
     assertEquals("John Doe", response.customerName());
-    assertEquals(OrderStatus.COMMANDEE, response.status());
+    assertEquals(OrderStatus.ORDERED, response.status());
     assertNotNull(response.items());
     assertEquals(1, response.items().size());
   }
@@ -77,7 +77,7 @@ class OrderMapperTest {
     item.setId(1L);
     item.setSize(Size.M);
     item.setUnitPrice(new BigDecimal("7.50"));
-    item.setPreparationStatus(PrepStatus.ASSEMBLAGE);
+    item.setPreparationStatus(PrepStatus.ASSEMBLY);
 
     Cocktail cocktail = new Cocktail();
     cocktail.setId(2L);
@@ -94,6 +94,6 @@ class OrderMapperTest {
     assertEquals("Margarita", itemResponse.cocktailName());
     assertEquals(Size.M, itemResponse.size());
     assertEquals(new BigDecimal("7.50"), itemResponse.unitPrice());
-    assertEquals(PrepStatus.ASSEMBLAGE, itemResponse.preparationStatus());
+    assertEquals(PrepStatus.ASSEMBLY, itemResponse.preparationStatus());
   }
 }

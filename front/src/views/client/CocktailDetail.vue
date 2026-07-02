@@ -104,13 +104,13 @@ const heroStyle = computed(() => ({
 }))
 
 const goBack = () => {
-  router.push('/carte')
+  router.push('/menu')
 }
 
 const addToCart = () => {
   if (cocktail.value) {
     cartStore.add(cocktail.value, selectedSize.value, selectedPrice.value)
-    router.push('/carte')
+    router.push('/menu')
   }
 }
 </script>

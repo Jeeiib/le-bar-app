@@ -7,7 +7,7 @@ describe('PrepStepper component', () => {
   it('doit monter correctement avec un status valide', () => {
     const wrapper = mount(PrepStepper, {
       props: {
-        status: 'PREPARATION_INGREDIENTS',
+        status: 'INGREDIENTS',
       },
     })
     expect(wrapper.exists()).toBe(true)
@@ -16,7 +16,7 @@ describe('PrepStepper component', () => {
   it('doit afficher 4 étapes', () => {
     const wrapper = mount(PrepStepper, {
       props: {
-        status: 'PREPARATION_INGREDIENTS',
+        status: 'INGREDIENTS',
       },
     })
 
@@ -27,7 +27,7 @@ describe('PrepStepper component', () => {
   it('doit afficher les labels des étapes', () => {
     const wrapper = mount(PrepStepper, {
       props: {
-        status: 'PREPARATION_INGREDIENTS',
+        status: 'INGREDIENTS',
       },
     })
 
@@ -41,7 +41,7 @@ describe('PrepStepper component', () => {
   it('doit afficher les numéros des étapes', () => {
     const wrapper = mount(PrepStepper, {
       props: {
-        status: 'PREPARATION_INGREDIENTS',
+        status: 'INGREDIENTS',
       },
     })
 
@@ -52,10 +52,10 @@ describe('PrepStepper component', () => {
     expect(dots[3]!.text()).toBe('4')
   })
 
-  it('doit avoir la classe cur sur l\'étape courante (PREPARATION_INGREDIENTS)', async () => {
+  it('doit avoir la classe cur sur l\'étape courante (INGREDIENTS)', async () => {
     const wrapper = mount(PrepStepper, {
       props: {
-        status: 'PREPARATION_INGREDIENTS',
+        status: 'INGREDIENTS',
       },
     })
 
@@ -66,10 +66,10 @@ describe('PrepStepper component', () => {
     expect(steps[3]!.classes()).not.toContain('cur')
   })
 
-  it('doit avoir la classe cur sur l\'étape courante (ASSEMBLAGE)', async () => {
+  it('doit avoir la classe cur sur l\'étape courante (ASSEMBLY)', async () => {
     const wrapper = mount(PrepStepper, {
       props: {
-        status: 'ASSEMBLAGE',
+        status: 'ASSEMBLY',
       },
     })
 
@@ -80,10 +80,10 @@ describe('PrepStepper component', () => {
     expect(steps[3]!.classes()).not.toContain('cur')
   })
 
-  it('doit avoir la classe cur sur l\'étape courante (DRESSAGE)', async () => {
+  it('doit avoir la classe cur sur l\'étape courante (GARNISH)', async () => {
     const wrapper = mount(PrepStepper, {
       props: {
-        status: 'DRESSAGE',
+        status: 'GARNISH',
       },
     })
 
@@ -94,10 +94,10 @@ describe('PrepStepper component', () => {
     expect(steps[3]!.classes()).not.toContain('cur')
   })
 
-  it('doit avoir la classe cur sur l\'étape courante (TERMINEE)', async () => {
+  it('doit avoir la classe cur sur l\'étape courante (COMPLETED)', async () => {
     const wrapper = mount(PrepStepper, {
       props: {
-        status: 'TERMINEE',
+        status: 'COMPLETED',
       },
     })
 
@@ -111,7 +111,7 @@ describe('PrepStepper component', () => {
   it('doit marquer les étapes précédentes comme done', async () => {
     const wrapper = mount(PrepStepper, {
       props: {
-        status: 'ASSEMBLAGE',
+        status: 'ASSEMBLY',
       },
     })
 
@@ -122,10 +122,10 @@ describe('PrepStepper component', () => {
     expect(steps[3]!.classes()).not.toContain('done')
   })
 
-  it('doit marquer toutes les étapes précédentes comme done quand TERMINEE', async () => {
+  it('doit marquer toutes les étapes précédentes comme done quand COMPLETED', async () => {
     const wrapper = mount(PrepStepper, {
       props: {
-        status: 'TERMINEE',
+        status: 'COMPLETED',
       },
     })
 
@@ -139,7 +139,7 @@ describe('PrepStepper component', () => {
   it('ne doit pas marquer d\'étapes comme done au début', async () => {
     const wrapper = mount(PrepStepper, {
       props: {
-        status: 'PREPARATION_INGREDIENTS',
+        status: 'INGREDIENTS',
       },
     })
 
@@ -153,14 +153,14 @@ describe('PrepStepper component', () => {
   it('doit réagir aux changements de statut', async () => {
     const wrapper = mount(PrepStepper, {
       props: {
-        status: 'PREPARATION_INGREDIENTS' as PrepStatus,
+        status: 'INGREDIENTS' as PrepStatus,
       },
     })
 
     let steps = wrapper.findAll('.step')
     expect(steps[0]!.classes()).toContain('cur')
 
-    await wrapper.setProps({ status: 'ASSEMBLAGE' })
+    await wrapper.setProps({ status: 'ASSEMBLY' })
 
     steps = wrapper.findAll('.step')
     expect(steps[0]!.classes()).toContain('done')
@@ -170,21 +170,21 @@ describe('PrepStepper component', () => {
   it('doit gérer les transitions multiples de statut', async () => {
     const wrapper = mount(PrepStepper, {
       props: {
-        status: 'PREPARATION_INGREDIENTS' as PrepStatus,
+        status: 'INGREDIENTS' as PrepStatus,
       },
     })
 
-    await wrapper.setProps({ status: 'ASSEMBLAGE' })
+    await wrapper.setProps({ status: 'ASSEMBLY' })
     let steps = wrapper.findAll('.step')
     expect(steps[1]!.classes()).toContain('cur')
 
-    await wrapper.setProps({ status: 'DRESSAGE' })
+    await wrapper.setProps({ status: 'GARNISH' })
     steps = wrapper.findAll('.step')
     expect(steps[0]!.classes()).toContain('done')
     expect(steps[1]!.classes()).toContain('done')
     expect(steps[2]!.classes()).toContain('cur')
 
-    await wrapper.setProps({ status: 'TERMINEE' })
+    await wrapper.setProps({ status: 'COMPLETED' })
     steps = wrapper.findAll('.step')
     expect(steps[3]!.classes()).toContain('done')
     expect(steps[3]!.classes()).toContain('cur')
@@ -193,7 +193,7 @@ describe('PrepStepper component', () => {
   it('doit avoir la classe stepper sur le conteneur', () => {
     const wrapper = mount(PrepStepper, {
       props: {
-        status: 'PREPARATION_INGREDIENTS',
+        status: 'INGREDIENTS',
       },
     })
 
@@ -204,7 +204,7 @@ describe('PrepStepper component', () => {
   it('doit afficher les points avec les classes correctes', () => {
     const wrapper = mount(PrepStepper, {
       props: {
-        status: 'DRESSAGE',
+        status: 'GARNISH',
       },
     })
 

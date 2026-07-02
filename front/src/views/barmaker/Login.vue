@@ -83,7 +83,7 @@ const handleLogin = async () => {
 
   try {
     await authStore.login(email.value, password.value)
-    router.push('/barmaker/commandes')
+    router.push('/barmaker/orders')
   } catch (error) {
     const msg = error instanceof Error ? error.message : 'Erreur de connexion'
     errorMessage.value = msg

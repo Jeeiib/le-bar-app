@@ -252,7 +252,7 @@ const handleSubmit = async () => {
         : await api.createCocktail(form.value)
     menu.upsertLocal(saved) // cache mis à jour instantanément (pas de rechargement)
     ui.toast(isEdit.value ? 'Cocktail modifié' : 'Cocktail ajouté', 'success')
-    router.push('/barmaker/carte')
+    router.push('/barmaker/menu')
   } catch (error) {
     ui.toast(error instanceof Error ? error.message : 'Erreur lors de l\'enregistrement', 'error')
   } finally {
@@ -261,7 +261,7 @@ const handleSubmit = async () => {
 }
 
 const goBack = () => {
-  router.push('/barmaker/carte')
+  router.push('/barmaker/menu')
 }
 
 onMounted(() => {

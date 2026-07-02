@@ -56,10 +56,10 @@ interface Props {
 const props = defineProps<Props>()
 
 const stepIndexMap: Record<PrepStatus, number> = {
-  PREPARATION_INGREDIENTS: 0,
-  ASSEMBLAGE: 1,
-  DRESSAGE: 2,
-  TERMINEE: 3,
+  INGREDIENTS: 0,
+  ASSEMBLY: 1,
+  GARNISH: 2,
+  COMPLETED: 3,
 }
 
 // computed pour rester reactif quand le statut de l'item change

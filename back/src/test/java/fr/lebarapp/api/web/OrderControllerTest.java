@@ -53,7 +53,7 @@ class OrderControllerTest {
     @Test
     void creationCommandeEstPublique() throws Exception {
         when(orderService.createOrder(any()))
-            .thenReturn(new OrderResponse(1L, 1L, "Table 1", "Customer", OrderStatus.COMMANDEE, LocalDateTime.now(), List.of(), BigDecimal.ZERO));
+            .thenReturn(new OrderResponse(1L, 1L, "Table 1", "Customer", OrderStatus.ORDERED, LocalDateTime.now(), List.of(), BigDecimal.ZERO));
 
         OrderRequest request = new OrderRequest(
             1L,
@@ -77,7 +77,7 @@ class OrderControllerTest {
     @Test
     void lectureQueueAvecTokenBarmakerRenvoie200() throws Exception {
         when(orderService.getQueue())
-            .thenReturn(List.of(new OrderResponse(1L, 1L, "Table 1", "Customer", OrderStatus.COMMANDEE, LocalDateTime.now(), List.of(), BigDecimal.ZERO)));
+            .thenReturn(List.of(new OrderResponse(1L, 1L, "Table 1", "Customer", OrderStatus.ORDERED, LocalDateTime.now(), List.of(), BigDecimal.ZERO)));
 
         mockMvc.perform(get("/api/orders/queue")
                 .header("Authorization", barmakerAuth()))
@@ -88,7 +88,7 @@ class OrderControllerTest {
     @Test
     void lectureParIdEstPublique() throws Exception {
         when(orderService.getOrderById(1L))
-            .thenReturn(new OrderResponse(1L, 1L, "Table 1", "Customer", OrderStatus.EN_PREPARATION, LocalDateTime.now(), List.of(), BigDecimal.ZERO));
+            .thenReturn(new OrderResponse(1L, 1L, "Table 1", "Customer", OrderStatus.IN_PREPARATION, LocalDateTime.now(), List.of(), BigDecimal.ZERO));
 
         mockMvc.perform(get("/api/orders/1"))
             .andExpect(status().isOk())
@@ -107,7 +107,7 @@ class OrderControllerTest {
     @Test
     void advanceItemPreparationAvecTokenBarmakerRenvoie200() throws Exception {
         when(orderService.advanceItemPreparation(1L, 1L))
-            .thenReturn(new OrderResponse(1L, 1L, "Table 1", "Customer", OrderStatus.EN_PREPARATION, LocalDateTime.now(), List.of(), BigDecimal.ZERO));
+            .thenReturn(new OrderResponse(1L, 1L, "Table 1", "Customer", OrderStatus.IN_PREPARATION, LocalDateTime.now(), List.of(), BigDecimal.ZERO));
 
         mockMvc.perform(patch("/api/orders/1/items/1/advance")
                 .header("Authorization", barmakerAuth()))

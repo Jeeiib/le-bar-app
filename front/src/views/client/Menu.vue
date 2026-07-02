@@ -143,7 +143,7 @@ const goToCocktail = (id: number) => {
 }
 
 const goToCart = () => {
-  router.push('/panier')
+  router.push('/cart')
 }
 </script>
 
