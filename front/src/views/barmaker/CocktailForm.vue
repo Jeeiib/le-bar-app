@@ -149,7 +149,7 @@ import * as api from '@/api/client'
 import { sizeCl } from '@/utils/sizes'
 import { useMenuStore } from '@/stores/menu'
 import { useUiStore } from '@/stores/ui'
-import type { Category, CocktailRequest, ExternalCocktail, Cocktail } from '@/types'
+import type { Category, CocktailRequest, ExternalCocktail } from '@/types'
 
 const router = useRouter()
 const route = useRoute()

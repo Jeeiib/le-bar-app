@@ -25,5 +25,16 @@ export default defineConfigWithVueTs(
     files: ['src/**/__tests__/*'],
   },
 
+  {
+    // Les vues sont des composants de page (une par route) : un nom d'un seul mot
+    // (Carte, Panier, Login...) est volontaire et lisible. La regle reste active
+    // pour les composants reutilisables de src/components.
+    name: 'app/views-single-word',
+    files: ['src/views/**/*.vue'],
+    rules: {
+      'vue/multi-word-component-names': 'off',
+    },
+  },
+
   ...pluginOxlint.buildFromOxlintConfigFile('.oxlintrc.json'),
 )
