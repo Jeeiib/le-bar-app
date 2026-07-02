@@ -2,6 +2,7 @@ package fr.lebarapp.api.web;
 
 import fr.lebarapp.api.dto.TableResponse;
 import fr.lebarapp.api.service.TableService;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,12 @@ public class TableController {
 
     public TableController(TableService tableService) {
         this.tableService = tableService;
+    }
+
+    // Public : liste des tables pour la generation des QR codes cote barmaker.
+    @GetMapping
+    public ResponseEntity<List<TableResponse>> getAllTables() {
+        return ResponseEntity.ok(tableService.getAllTables());
     }
 
     // Public : le client scanne le QR (slug) et recupere sa table pour commander.

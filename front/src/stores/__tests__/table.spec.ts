@@ -23,7 +23,7 @@ describe('Table store', () => {
     })
 
     it('doit charger la table depuis sessionStorage si présente', () => {
-      const mockTable: TableInfo = { id: 1, label: 'Table 1' }
+      const mockTable: TableInfo = { id: 1, label: 'Table 1', qrSlug: 'table-1' }
       sessionStorage.setItem('barapp_table', JSON.stringify(mockTable))
 
       const tableStore = useTableStore()
@@ -38,7 +38,7 @@ describe('Table store', () => {
     })
 
     it('doit charger à la fois table et customer name du sessionStorage', () => {
-      const mockTable: TableInfo = { id: 1, label: 'Table 1' }
+      const mockTable: TableInfo = { id: 1, label: 'Table 1', qrSlug: 'table-1' }
       sessionStorage.setItem('barapp_table', JSON.stringify(mockTable))
       sessionStorage.setItem('barapp_customer', 'Bob')
 
@@ -52,7 +52,7 @@ describe('Table store', () => {
     it('doit appeler l\'API getTable avec le qrSlug', async () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const apiClient = (await import('@/api/client')) as any
-      const mockTable: TableInfo = { id: 1, label: 'Table 1' }
+      const mockTable: TableInfo = { id: 1, label: 'Table 1', qrSlug: 'table-1' }
       apiClient.getTable.mockResolvedValueOnce(mockTable)
 
       const tableStore = useTableStore()
@@ -63,7 +63,7 @@ describe('Table store', () => {
 
     it('doit mettre à jour current avec la réponse de l\'API', async () => {
       const apiClient = await import('@/api/client')
-      const mockTable: TableInfo = { id: 5, label: 'Table 5' }
+      const mockTable: TableInfo = { id: 5, label: 'Table 5', qrSlug: 'table-5' }
       vi.mocked(apiClient.getTable).mockResolvedValueOnce(mockTable)
 
       const tableStore = useTableStore()
@@ -75,7 +75,7 @@ describe('Table store', () => {
 
     it('doit retourner les infos de la table chargée', async () => {
       const apiClient = await import('@/api/client')
-      const mockTable: TableInfo = { id: 3, label: 'Terrasse' }
+      const mockTable: TableInfo = { id: 3, label: 'Terrasse', qrSlug: 'outdoor' }
       vi.mocked(apiClient.getTable).mockResolvedValueOnce(mockTable)
 
       const tableStore = useTableStore()
@@ -121,7 +121,7 @@ describe('Table store', () => {
     it('doit sauvegarder current dans sessionStorage quand il change', async () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const apiClient = (await import('@/api/client')) as any
-      const mockTable: TableInfo = { id: 1, label: 'Table 1' }
+      const mockTable: TableInfo = { id: 1, label: 'Table 1', qrSlug: 'table-1' }
       apiClient.getTable.mockResolvedValueOnce(mockTable)
 
       const tableStore = useTableStore()
@@ -163,7 +163,7 @@ describe('Table store', () => {
 
     it('doit permettre de modifier current manuellement', () => {
       const tableStore = useTableStore()
-      const newTable: TableInfo = { id: 2, label: 'Table 2' }
+      const newTable: TableInfo = { id: 2, label: 'Table 2', qrSlug: 'table-2' }
       tableStore.current = newTable
 
       expect(tableStore.current).toEqual(newTable)
@@ -171,7 +171,7 @@ describe('Table store', () => {
 
     it('doit sauvegarder les changements manuels en sessionStorage', async () => {
       const tableStore = useTableStore()
-      const newTable: TableInfo = { id: 10, label: 'Bar' }
+      const newTable: TableInfo = { id: 10, label: 'Bar', qrSlug: 'bar' }
       tableStore.current = newTable
       await new Promise(resolve => setTimeout(resolve, 10))
 

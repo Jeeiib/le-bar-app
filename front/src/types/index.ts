@@ -65,6 +65,7 @@ export interface Order {
 export interface TableInfo {
   id: number
   label: string
+  qrSlug: string
 }
 
 // Réponse d'authentification

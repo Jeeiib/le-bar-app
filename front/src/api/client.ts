@@ -70,6 +70,10 @@ export async function getTable(qrSlug: string): Promise<TableInfo> {
   return fetchAPI(`/tables/${qrSlug}`)
 }
 
+export async function getTables(): Promise<TableInfo[]> {
+  return fetchAPI('/tables')
+}
+
 export async function getCategories(): Promise<Category[]> {
   return fetchAPI('/categories')
 }
