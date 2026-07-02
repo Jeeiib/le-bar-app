@@ -360,6 +360,29 @@ describe('API client', () => {
       )
     })
 
+    it('deleteTable doit appeler DELETE /api/tables/:id avec auth', async () => {
+      const mockFetch = global.fetch as ReturnType<typeof vi.fn>
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        status: 204,
+        text: async () => '',
+      })
+
+      const authStore = useAuthStore()
+      authStore.token = 'token123'
+
+      await api.deleteTable(13)
+      expect(mockFetch).toHaveBeenCalledWith(
+        '/api/tables/13',
+        expect.objectContaining({
+          method: 'DELETE',
+          headers: expect.objectContaining({
+            Authorization: 'Bearer token123',
+          }),
+        })
+      )
+    })
+
     it('advanceItem doit appeler le bon endpoint avec PATCH et auth', async () => {
       const mockFetch = global.fetch as ReturnType<typeof vi.fn>
       mockFetch.mockResolvedValueOnce({

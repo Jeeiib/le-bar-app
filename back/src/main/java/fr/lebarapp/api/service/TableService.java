@@ -40,6 +40,19 @@ public class TableService {
         return new TableResponse(table.getId(), table.getLabel(), table.getQrSlug());
     }
 
+    @Transactional
+    public void deleteTable(Long id) {
+        BarTable table = barTableRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Table introuvable avec l'ID: " + id));
+        try {
+            barTableRepository.delete(table);
+            barTableRepository.flush();
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            // La table est référencée par des commandes : on bloque proprement.
+            throw new BusinessException("Impossible de supprimer cette table : des commandes y sont rattachées.");
+        }
+    }
+
     // Transforme un nom libre en slug d'URL : sans accents, en minuscules, tirets à la place
     // de tout ce qui n'est ni lettre ni chiffre.
     private String slugify(String label) {
