@@ -191,3 +191,12 @@ export async function searchExternal(name: string): Promise<ExternalCocktail[]> 
     useAuth: true,
   })
 }
+
+// Cree une table (barmaker) : le back deduit le slug du QR a partir du nom.
+export async function createTable(label: string): Promise<TableInfo> {
+  return fetchAPI('/tables', {
+    method: 'POST',
+    body: { label },
+    useAuth: true,
+  })
+}

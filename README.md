@@ -56,12 +56,24 @@ Le front relaie automatiquement les appels `/api` vers l'API : il n'y a rien à 
 Les conteneurs étant lancés sur une machine, les autres appareils du même réseau accèdent à l'application via l'IP de cette machine, par exemple `http://192.168.x.x:8080`.
 
 - **Device client** : ouvrir une table, par exemple http://localhost:8080/t/table-1 (tables `table-1` à `table-12`).
-- **Device barmaker** : ouvrir http://localhost:8080/barmaker/login puis se connecter.
+- **Device barmaker** : ouvrir http://localhost:8080/barmaker/login puis se connecter. La page **Tables** affiche les QR codes et permet d'en **ajouter de nouvelles** (le QR est généré automatiquement à partir du nom).
+
+> **Scanner les QR codes avec un téléphone** : chaque QR encode l'adresse par laquelle la page barmaker a été ouverte. Pour qu'un téléphone puisse les scanner, ouvrir la page barmaker via l'**IP réseau** de la machine (ex `http://192.168.x.x:8080/barmaker/login`), et **non** `localhost` (que le téléphone ne peut pas joindre). Le téléphone doit être sur le même réseau Wi-Fi.
 
 ### Identifiants barmaker
 
 - Email : `barmaker@lebarapp.fr`
 - Mot de passe : `barmaker123`
+
+### Parcours de test (bout en bout)
+
+Pour valider l'application après le démarrage :
+
+1. **Client** — ouvrir http://localhost:8080 (redirige vers une table). Parcourir la carte, ouvrir un cocktail, l'ajouter au panier, puis **commander** (le prénom est optionnel).
+2. **Barmaker** — se connecter sur `/barmaker/login`. La commande apparaît dans la file **Commandes** ; l'ouvrir et faire avancer chaque cocktail étape par étape (Ingrédients → Assemblage → Dressage → Terminé).
+3. **Client** — sur la page de suivi de la commande, l'avancement se met à jour automatiquement (interrogation régulière du serveur).
+4. **Gestion de la carte** — côté barmaker, page **Ma carte** : créer, modifier ou supprimer un cocktail (préremplissage possible depuis TheCocktailDB). Les changements sont aussitôt visibles côté client.
+5. **Tables & QR** — page **Tables** : imprimer les QR ou **ajouter une nouvelle table** (son QR est généré automatiquement). Pour scanner au téléphone, voir la note ci-dessus (ouvrir via l'IP réseau).
 
 ### Traduction des imports (optionnel)
 

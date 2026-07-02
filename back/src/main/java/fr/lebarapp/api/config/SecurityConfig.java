@@ -48,6 +48,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/categories/**", "/api/ingredients/**", "/api/cocktails/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/tables/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/tables").hasRole("BARMAKER")
                 .requestMatchers(HttpMethod.GET, "/api/orders/queue").hasRole("BARMAKER")
                 .requestMatchers(HttpMethod.POST, "/api/orders").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/orders/*").permitAll()

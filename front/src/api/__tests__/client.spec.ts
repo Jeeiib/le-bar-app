@@ -336,6 +336,30 @@ describe('API client', () => {
       )
     })
 
+    it('createTable doit appeler POST /api/tables avec le nom et auth', async () => {
+      const mockFetch = global.fetch as ReturnType<typeof vi.fn>
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        status: 201,
+        text: async () => JSON.stringify({ id: 13, label: 'Terrasse 1', qrSlug: 'terrasse-1' }),
+      })
+
+      const authStore = useAuthStore()
+      authStore.token = 'token123'
+
+      await api.createTable('Terrasse 1')
+      expect(mockFetch).toHaveBeenCalledWith(
+        '/api/tables',
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({ label: 'Terrasse 1' }),
+          headers: expect.objectContaining({
+            Authorization: 'Bearer token123',
+          }),
+        })
+      )
+    })
+
     it('advanceItem doit appeler le bon endpoint avec PATCH et auth', async () => {
       const mockFetch = global.fetch as ReturnType<typeof vi.fn>
       mockFetch.mockResolvedValueOnce({
