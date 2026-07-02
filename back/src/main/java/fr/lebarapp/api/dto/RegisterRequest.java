@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+// Données de création d'un compte staff (nom, email, mot de passe).
 public record RegisterRequest(
     @NotBlank(message = "Le nom est requis")
     String name,

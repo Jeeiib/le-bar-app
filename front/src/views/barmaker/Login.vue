@@ -58,6 +58,8 @@
 </template>
 
 <script setup lang="ts">
+// Page de connexion du barmaker : envoie les identifiants et, en cas de succès, redirige vers
+// la file de commandes.
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'

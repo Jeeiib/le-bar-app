@@ -1,3 +1,5 @@
+// Routes de l'application (espace client public + espace barmaker) et garde d'accès qui protège
+// les pages barmaker (meta.requiresAuth).
 import { createRouter, createWebHistory, type RouteLocationNormalized } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 

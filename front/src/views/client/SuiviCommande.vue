@@ -52,6 +52,8 @@
 </template>
 
 <script setup lang="ts">
+// Suivi d'une commande côté client : affiche l'avancement de chaque cocktail et se rafraîchit
+// tout seul par interrogation régulière du serveur (polling), voir onMounted.
 import { onMounted, onUnmounted, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import * as api from '@/api/client'

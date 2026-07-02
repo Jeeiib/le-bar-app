@@ -7,6 +7,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+// Fait le lien entre nos comptes en base et Spring Security : charge un utilisateur par son email
+// et expose son mot de passe haché et son rôle pour l'authentification.
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 

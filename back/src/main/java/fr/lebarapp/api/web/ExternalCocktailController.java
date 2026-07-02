@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+// Endpoint réservé au barmaker : recherche dans TheCocktailDB pour préremplir la fiche d'un cocktail.
 @RestController
 @RequestMapping("/api/external")
 public class ExternalCocktailController {

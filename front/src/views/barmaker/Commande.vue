@@ -53,6 +53,8 @@
 </template>
 
 <script setup lang="ts">
+// Traitement d'une commande par le barmaker : fait avancer chaque cocktail d'une étape de
+// préparation (bouton « Étape suivante ») jusqu'à la commande complète.
 import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import * as api from '@/api/client'

@@ -143,6 +143,8 @@
 </template>
 
 <script setup lang="ts">
+// Formulaire de création et d'édition d'un cocktail : saisie manuelle ou préremplissage via une
+// recherche sur TheCocktailDB, avec les ingrédients et un prix par taille.
 import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import * as api from '@/api/client'

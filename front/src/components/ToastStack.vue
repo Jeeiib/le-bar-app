@@ -9,6 +9,7 @@
 </template>
 
 <script setup lang="ts">
+// Pile de notifications éphémères (toasts) affichées en bas de l'écran, pilotée par le store ui.
 import { useUiStore } from '@/stores/ui'
 
 const ui = useUiStore()

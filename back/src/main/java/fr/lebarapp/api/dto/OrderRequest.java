@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
+// Commande envoyée par le client : sa table, un nom optionnel et les articles choisis.
 public record OrderRequest(
     @NotNull(message = "L'identifiant de la table ne peut pas être nul")
     Long tableId,

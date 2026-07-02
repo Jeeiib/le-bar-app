@@ -13,6 +13,7 @@
 </template>
 
 <script setup lang="ts">
+// Boîte de confirmation globale, pilotée par le store ui (remplace le confirm() natif du navigateur).
 import { useUiStore } from '@/stores/ui'
 
 const ui = useUiStore()

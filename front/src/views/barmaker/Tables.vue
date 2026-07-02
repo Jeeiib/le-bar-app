@@ -36,6 +36,9 @@
 </template>
 
 <script setup lang="ts">
+// Génère les QR codes des tables à imprimer. Chaque QR encode l'URL du menu de la table à partir
+// de l'adresse d'accès courante (window.location.origin), pour rester valable quelle que soit
+// l'adresse utilisée (LAN, nom de domaine…) plutôt qu'un localhost figé.
 import { ref, onMounted } from 'vue'
 import * as api from '@/api/client'
 import { useUiStore } from '@/stores/ui'

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+// Endpoints publics des tables du bar : liste (barmaker) et accès par slug de QR code (client).
 @RestController
 @RequestMapping("/api/tables")
 public class TableController {

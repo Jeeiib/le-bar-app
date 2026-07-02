@@ -1,3 +1,5 @@
+// Store d'authentification du barmaker : conserve le jeton JWT et l'identité, persistés en
+// localStorage pour rester connecté après un rafraîchissement de la page.
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import * as api from '@/api/client'

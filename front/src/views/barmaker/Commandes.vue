@@ -52,6 +52,8 @@
 </template>
 
 <script setup lang="ts">
+// File de commandes côté barmaker : onglets « à traiter » / « en cours », rafraîchie automatiquement
+// par interrogation régulière du serveur (polling, voir onMounted).
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import * as api from '@/api/client'

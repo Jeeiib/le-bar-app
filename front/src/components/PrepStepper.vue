@@ -44,6 +44,8 @@
 </template>
 
 <script setup lang="ts">
+// Frise des 4 étapes de préparation d'un cocktail (ingrédients, assemblage, dressage, terminé) ;
+// met en avant l'étape en cours. Réutilisée côté client (suivi) et côté barmaker.
 import { computed } from 'vue'
 import type { PrepStatus } from '@/types'
 

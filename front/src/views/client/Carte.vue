@@ -85,6 +85,8 @@
 </template>
 
 <script setup lang="ts">
+// Carte côté client : liste les cocktails groupés par catégorie (depuis le cache du menu),
+// avec filtres par catégorie et accès au panier.
 import { onMounted, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '@/stores/cart'

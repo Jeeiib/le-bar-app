@@ -4,6 +4,7 @@ import fr.lebarapp.api.domain.Ingredient;
 import fr.lebarapp.api.dto.IngredientRequest;
 import fr.lebarapp.api.dto.IngredientResponse;
 
+// Convertit les ingrédients entre entités (base) et DTO (API), dans les deux sens.
 public class IngredientMapper {
 
     private IngredientMapper() {

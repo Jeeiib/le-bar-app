@@ -78,6 +78,8 @@
 </template>
 
 <script setup lang="ts">
+// Gestion de la carte côté barmaker : liste les cocktails par catégorie, avec édition et
+// suppression (mise à jour immédiate du cache et retour arrière si l'API échoue).
 import { ref, computed, onMounted } from 'vue'
 import * as api from '@/api/client'
 import { useMenuStore } from '@/stores/menu'

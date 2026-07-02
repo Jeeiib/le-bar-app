@@ -48,6 +48,7 @@
 </template>
 
 <script setup lang="ts">
+// Fiche détaillée d'un cocktail : ingrédients, choix de la taille (avec prix) et ajout au panier.
 import { onMounted, ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useCartStore } from '@/stores/cart'

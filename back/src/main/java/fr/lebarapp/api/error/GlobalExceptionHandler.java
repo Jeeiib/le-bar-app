@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// Gestion centralisée des erreurs : intercepte les exceptions de toute l'API et les traduit
+// en réponses HTTP cohérentes, pour ne jamais renvoyer une stack trace brute au client.
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -50,6 +52,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 
+    // Validation des DTO en échec (@Valid) : on renvoie le détail champ par champ.
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationException(
         MethodArgumentNotValidException ex) {

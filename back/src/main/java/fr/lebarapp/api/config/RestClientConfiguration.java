@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 
+// Fournit le RestClient.Builder injecté dans les clients d'API externes (TheCocktailDB, traduction).
 @Configuration
 public class RestClientConfiguration {
 

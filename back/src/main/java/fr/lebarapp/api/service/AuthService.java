@@ -11,6 +11,8 @@ import fr.lebarapp.api.security.JwtService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+// Inscription et connexion des barmakers : vérifie les identifiants (mot de passe haché
+// via PasswordEncoder) et délivre un jeton JWT en cas de succès.
 @Service
 public class AuthService {
 
@@ -50,6 +52,7 @@ public class AuthService {
             .orElseThrow(() -> new BusinessException("Email ou mot de passe incorrect"));
 
         if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
+            // Même message que pour un email inconnu : on ne révèle pas lequel des deux est faux.
             throw new BusinessException("Email ou mot de passe incorrect");
         }
 

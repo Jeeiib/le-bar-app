@@ -8,6 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
+// Client de l'API publique TheCocktailDB, utilisé côté barmaker pour rechercher un cocktail et
+// préremplir sa fiche. L'image est téléchargée puis stockée en base : au runtime, l'application
+// ne dépend plus de cette API.
 @Component
 public class TheCocktailDbClient {
 

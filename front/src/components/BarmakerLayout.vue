@@ -40,6 +40,8 @@
 </template>
 
 <script setup lang="ts">
+// Ossature commune des pages barmaker : barre de navigation latérale (Commandes, Ma carte,
+// Tables) + zone de contenu (slot), avec le bouton de déconnexion.
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 

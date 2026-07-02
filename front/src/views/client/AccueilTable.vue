@@ -39,6 +39,8 @@
 </template>
 
 <script setup lang="ts">
+// Écran d'accueil affiché quand le client scanne le QR d'une table : charge la table depuis
+// le slug de l'URL et propose un prénom optionnel avant d'accéder à la carte.
 import { onMounted, ref } from 'vue'
 import { useTableStore } from '@/stores/table'
 import { useRouter, useRoute } from 'vue-router'

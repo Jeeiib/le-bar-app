@@ -1,3 +1,4 @@
+// Point d'entrée du front : crée l'application Vue, branche Pinia (état) et le routeur, puis la monte.
 import './assets/main.css'
 
 import { createApp } from 'vue'
