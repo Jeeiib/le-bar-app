@@ -123,7 +123,7 @@ describe('API client', () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         status: 200,
-        text: async () => JSON.stringify({ id: 1, label: 'Table 1' }),
+        text: async () => JSON.stringify({ id: 1, label: 'Table 1', qrSlug: 'table-1' }),
       })
 
       const result = await api.getTable('abc123')
@@ -134,6 +134,29 @@ describe('API client', () => {
         })
       )
       expect(result).toBeDefined()
+    })
+
+    it('getTables doit appeler le bon endpoint et retourner un tableau de tables', async () => {
+      const mockFetch = global.fetch as ReturnType<typeof vi.fn>
+      const mockTables = [
+        { id: 1, label: 'Table 1', qrSlug: 'table-1' },
+        { id: 2, label: 'Table 2', qrSlug: 'table-2' },
+      ]
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        text: async () => JSON.stringify(mockTables),
+      })
+
+      const result = await api.getTables()
+      expect(mockFetch).toHaveBeenCalledWith(
+        '/api/tables',
+        expect.objectContaining({
+          method: 'GET',
+        })
+      )
+      expect(result).toEqual(mockTables)
+      expect(result[0]?.qrSlug).toBeDefined()
     })
 
     it('getCategories doit appeler le bon endpoint', async () => {

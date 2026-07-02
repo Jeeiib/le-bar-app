@@ -18,6 +18,13 @@
         >
           Ma carte
         </router-link>
+        <router-link
+          to="/barmaker/tables"
+          class="nav-link"
+          :class="{ on: isActive('/barmaker/tables') }"
+        >
+          Tables
+        </router-link>
       </nav>
       <div class="role">{{ role }} • {{ location }}</div>
       <button @click="handleLogout" class="logout-btn">

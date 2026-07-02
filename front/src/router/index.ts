@@ -99,6 +99,14 @@ const router = createRouter({
       component: () => import('../views/barmaker/CocktailForm.vue'),
       meta: { requiresAuth: true },
     },
+
+    // QR codes des tables
+    {
+      path: '/barmaker/tables',
+      name: 'BarmakerTables',
+      component: () => import('../views/barmaker/Tables.vue'),
+      meta: { requiresAuth: true },
+    },
   ],
 })
 
