@@ -1,7 +1,3 @@
-// Le Bar'app - Modele Conceptuel de Donnees
-// A coller dans https://dbdiagram.io (bouton Import > "Import From DBML", ou directement dans l'editeur)
-// Puis Export > PNG ou PDF pour le livrable.
-
 Enum user_role {
   BARMAKER
   ADMIN
