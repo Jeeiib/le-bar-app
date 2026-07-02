@@ -1,0 +1,137 @@
+/* Google Fonts import */
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+/* Design tokens */
+:root {
+  /* Colors */
+  --glacon: #f7f8fa;
+  --encre: #16161d;
+  --spritz: #ff4d2e;
+  --menthe: #00c2a8;
+  --agrume: #ffc53d;
+
+  /* Fonts */
+  --font-display: 'Archivo', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+
+/* Reset léger */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--glacon);
+  color: var(--encre);
+  line-height: 1.6;
+  /* Comportement "app" : pas de défilement/drag horizontal.
+     clip (et non hidden) n'établit pas de conteneur de scroll → le scroll vertical reste sur la fenêtre. */
+  overflow-x: clip;
+  overscroll-behavior-x: none;
+}
+
+#app {
+  min-height: 100vh;
+  width: 100%;
+  /* App-like : autorise uniquement le défilement vertical (pas de drag horizontal ni de zoom),
+     ce qui supprime aussi le délai de 300ms au tap */
+  touch-action: pan-y;
+}
+
+/* Liens */
+a {
+  color: var(--spritz);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: var(--menthe);
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  margin-top: 0;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 900;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* Buttons par défaut : chaque composant définit son propre padding et arrondi */
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  font-weight: 600;
+  touch-action: manipulation;
+}
+
+button.primary {
+  background-color: var(--spritz);
+  color: white;
+}
+
+button.primary:hover {
+  background-color: #e63d1f;
+}
+
+button.secondary {
+  background-color: transparent;
+  color: var(--spritz);
+  border: 2px solid var(--spritz);
+}
+
+button.secondary:hover {
+  background-color: var(--spritz);
+  color: white;
+}
+
+/* Forms */
+input,
+textarea,
+select {
+  font-family: var(--font-body);
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--spritz);
+  box-shadow: 0 0 0 3px rgba(255, 77, 46, 0.1);
+}
