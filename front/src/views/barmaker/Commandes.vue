@@ -56,12 +56,12 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import * as api from '@/api/client'
 import type { Order, OrderStatus } from '@/types'
+import { statusLabel, statusClass } from '@/utils/orderStatus'
 import BarmakerLayout from '@/components/BarmakerLayout.vue'
 
 const router = useRouter()
 const orders = ref<Order[]>([])
 const selectedTab = ref<OrderStatus>('COMMANDEE')
-const isLoading = ref(false)
 let pollInterval: number | null = null
 
 interface TabConfig {
@@ -92,32 +92,6 @@ const newOrdersCount = computed(
   () => orders.value.filter((o) => o.status === 'COMMANDEE').length
 )
 
-const statusLabel = (status: OrderStatus): string => {
-  switch (status) {
-    case 'COMMANDEE':
-      return 'Commandée'
-    case 'EN_PREPARATION':
-      return 'En cours'
-    case 'TERMINEE':
-      return 'Terminée'
-    default:
-      return status
-  }
-}
-
-const statusClass = (status: OrderStatus): string => {
-  switch (status) {
-    case 'COMMANDEE':
-      return 'sb-new'
-    case 'EN_PREPARATION':
-      return 'sb-prep'
-    case 'TERMINEE':
-      return 'sb-done'
-    default:
-      return ''
-  }
-}
-
 const formatRelativeTime = (isoDate?: string): string => {
   if (!isoDate) return '?'
 
@@ -143,13 +117,10 @@ const goToOrder = (orderId: number): void => {
 }
 
 const loadOrders = async () => {
-  isLoading.value = true
   try {
     orders.value = await api.getQueue()
   } catch (error) {
     console.error('Erreur lors du chargement des commandes:', error)
-  } finally {
-    isLoading.value = false
   }
 }
 

@@ -9,5 +9,3 @@ import ToastStack from '@/components/ToastStack.vue'
   <ConfirmModal />
   <ToastStack />
 </template>
-
-<style scoped></style>
