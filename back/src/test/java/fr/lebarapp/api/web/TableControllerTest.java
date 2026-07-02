@@ -2,6 +2,7 @@ package fr.lebarapp.api.web;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -94,5 +95,18 @@ class TableControllerTest {
                 .content(objectMapper.writeValueAsString(new TableRequest("Terrasse 1"))))
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.qrSlug").value("terrasse-1"));
+    }
+
+    @Test
+    void suppressionTableRefuseeSansAuthentification() throws Exception {
+        mockMvc.perform(delete("/api/tables/1"))
+            .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    void suppressionTableParBarmakerRenvoie204() throws Exception {
+        mockMvc.perform(delete("/api/tables/1")
+                .header("Authorization", barmakerAuth()))
+            .andExpect(status().isNoContent());
     }
 }

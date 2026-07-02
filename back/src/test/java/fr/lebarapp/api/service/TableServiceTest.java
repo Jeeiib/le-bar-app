@@ -3,6 +3,8 @@ package fr.lebarapp.api.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import fr.lebarapp.api.domain.BarTable;
@@ -103,5 +105,34 @@ class TableServiceTest {
     void creationRefuseeSiNomSansCaractereValide() {
         assertThrows(BusinessException.class,
             () -> tableService.createTable(new TableRequest("!!!")));
+    }
+
+    @Test
+    void suppressionTableSupprimeLaTable() {
+        BarTable table = new BarTable();
+        table.setId(5L);
+        when(barTableRepository.findById(5L)).thenReturn(Optional.of(table));
+
+        tableService.deleteTable(5L);
+
+        verify(barTableRepository).delete(table);
+    }
+
+    @Test
+    void suppressionTableInexistanteLeveResourceNotFound() {
+        when(barTableRepository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> tableService.deleteTable(99L));
+    }
+
+    @Test
+    void suppressionTableEnCommandeLeveBusinessException() {
+        BarTable table = new BarTable();
+        table.setId(1L);
+        when(barTableRepository.findById(1L)).thenReturn(Optional.of(table));
+        doThrow(new org.springframework.dao.DataIntegrityViolationException("fk"))
+            .when(barTableRepository).flush();
+
+        assertThrows(BusinessException.class, () -> tableService.deleteTable(1L));
     }
 }

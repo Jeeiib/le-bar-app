@@ -200,3 +200,11 @@ export async function createTable(label: string): Promise<TableInfo> {
     useAuth: true,
   })
 }
+
+// Supprime une table (barmaker) ; refusee cote back si des commandes y sont rattachees.
+export async function deleteTable(id: number): Promise<void> {
+  return fetchAPI(`/tables/${id}`, {
+    method: 'DELETE',
+    useAuth: true,
+  })
+}

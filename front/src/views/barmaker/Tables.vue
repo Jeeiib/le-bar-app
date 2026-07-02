@@ -35,15 +35,10 @@
       <div v-for="table in tables" :key="table.id" class="table-card">
         <div class="table-label">{{ table.label }}</div>
         <div class="qr-container">
-          <QrcodeVue
-            :value="qrUrl(table.qrSlug)"
-            :size="160"
-            level="M"
-            foreground="#16161d"
-            background="#ffffff"
-          />
+          <QrcodeVue :value="qrUrl(table.qrSlug)" :size="160" level="M" />
         </div>
         <div class="table-url">{{ qrUrl(table.qrSlug) }}</div>
+        <button class="btn-delete" @click="removeTable(table)">Supprimer</button>
       </div>
     </div>
 
@@ -92,6 +87,21 @@ const addTable = async () => {
     ui.toast(error instanceof Error ? error.message : 'Création impossible', 'error')
   } finally {
     isAdding.value = false
+  }
+}
+
+// Supprime une table après confirmation, puis la retire de la liste (toast d'erreur si refus)
+const removeTable = async (table: TableInfo) => {
+  const ok = await ui.confirm(`Supprimer la table « ${table.label} » ?`, 'Supprimer')
+  if (!ok) {
+    return
+  }
+  try {
+    await api.deleteTable(table.id)
+    tables.value = tables.value.filter((t) => t.id !== table.id)
+    ui.toast('Table supprimée', 'success')
+  } catch (error) {
+    ui.toast(error instanceof Error ? error.message : 'Suppression impossible', 'error')
   }
 }
 
@@ -242,6 +252,20 @@ onMounted(async () => {
   word-break: break-all;
 }
 
+.btn-delete {
+  background: none;
+  border: none;
+  color: var(--spritz);
+  font-family: var(--font-body);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.btn-delete:hover {
+  text-decoration: underline;
+}
+
 .empty-state {
   text-align: center;
   padding: 60px 20px;
@@ -299,7 +323,8 @@ onMounted(async () => {
   }
 
   .btn-print,
-  .add-table {
+  .add-table,
+  .btn-delete {
     display: none;
   }
 
