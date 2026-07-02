@@ -17,9 +17,16 @@ Projet réalisé dans le cadre du titre Concepteur Développeur d'Applications (
 
 ## Structure
 
-- `back/` — API REST Spring Boot
-- `front/` — application Vue
-- `docs/` — conception (MCD, maquettes)
+- `back/` — API REST Spring Boot (Java 25)
+- `front/` — application Vue (TypeScript)
+- `docs/` — documents de conception (voir ci-dessous)
+
+## Documents de conception (livrables)
+
+Tout se trouve dans le dossier `docs/` :
+
+- **MCD** (Modèle Conceptuel de Données) : [`docs/mcd.png`](docs/mcd.png) (image) et [`docs/mcd.dbml`](docs/mcd.dbml) (source, ré-importable sur dbdiagram.io)
+- **Maquettes** : [`docs/maquettes.pdf`](docs/maquettes.pdf)
 
 ## Lancer le projet
 
