@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+// Configuration de la sécurité : API sans session (stateless), authentifiée par JWT.
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -38,8 +39,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            // API stateless authentifiée par JWT : pas de session serveur ni de CSRF.
             .csrf(csrf -> csrf.disable())
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            // Le client commande sans compte : lecture de la carte et création/suivi de
+            // commande sont publics ; l'administration est réservée au rôle BARMAKER.
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/categories/**", "/api/ingredients/**", "/api/cocktails/**").permitAll()
@@ -52,6 +56,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/external/**").hasRole("BARMAKER")
                 .anyRequest().authenticated()
             )
+            // Valide le jeton JWT avant le traitement standard de l'authentification.
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

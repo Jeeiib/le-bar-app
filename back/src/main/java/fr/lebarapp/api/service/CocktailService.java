@@ -21,6 +21,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// Logique métier de la carte : CRUD des cocktails (catégorie, ingrédients avec mesure,
+// tailles et prix) et préremplissage depuis TheCocktailDB.
 @Service
 public class CocktailService {
 

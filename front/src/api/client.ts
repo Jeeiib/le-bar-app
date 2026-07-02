@@ -1,3 +1,5 @@
+// Couche d'accès à l'API : tous les appels passent par ici, en chemins /api relatifs
+// (le proxy nginx les route vers le back). Le jeton JWT du barmaker est ajouté au besoin.
 import { useAuthStore } from '@/stores/auth'
 import type {
   Category,

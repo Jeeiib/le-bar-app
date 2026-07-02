@@ -23,6 +23,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// Logique métier des commandes : création (avec figeage du prix de la taille choisie),
+// file du barmaker, et avancement des étapes de préparation.
 @Service
 public class OrderService {
 

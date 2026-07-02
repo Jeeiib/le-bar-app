@@ -1,3 +1,4 @@
+// Store du panier client : ajout/retrait/quantités et total, conservé le temps de la session.
 import { defineStore } from 'pinia'
 import { ref, computed, watch } from 'vue'
 import type { Cocktail, Size } from '@/types'

@@ -10,6 +10,7 @@ import fr.lebarapp.api.dto.SizePriceRequest;
 import fr.lebarapp.api.dto.SizePriceResponse;
 import java.util.List;
 
+// Convertit les cocktails entre entités (base) et DTO (API), dans les deux sens.
 public class CocktailMapper {
 
     private CocktailMapper() {

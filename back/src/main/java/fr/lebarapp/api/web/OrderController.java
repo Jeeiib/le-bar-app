@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+// Points d'entrée HTTP des commandes : le client crée et suit sa commande,
+// le barmaker consulte la file à traiter et fait avancer chaque cocktail.
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
@@ -31,6 +33,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
 
+    // File des commandes à traiter, côté barmaker (les plus anciennes d'abord).
     @GetMapping("/queue")
     public ResponseEntity<List<OrderResponse>> getQueue() {
         List<OrderResponse> orders = orderService.getQueue();
@@ -43,6 +46,7 @@ public class OrderController {
         return ResponseEntity.ok(order);
     }
 
+    // Le barmaker fait avancer un cocktail d'une étape de préparation.
     @PatchMapping("/{orderId}/items/{itemId}/advance")
     public ResponseEntity<OrderResponse> advanceItemPreparation(
         @PathVariable Long orderId,

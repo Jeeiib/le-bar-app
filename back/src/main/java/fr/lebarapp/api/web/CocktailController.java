@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+// Points d'entrée HTTP de la carte : lecture publique (client),
+// création/édition/suppression réservées au barmaker. Sert aussi la photo du cocktail.
 @RestController
 @RequestMapping("/api/cocktails")
 public class CocktailController {
