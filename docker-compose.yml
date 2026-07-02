@@ -5,15 +5,17 @@ services:
       POSTGRES_DB: barapp
       POSTGRES_USER: barapp
       POSTGRES_PASSWORD: barapp
-    ports:
-      - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
+      # Script d'initialisation : cree le schema et charge la carte de demonstration
+      # (cocktails, photos, categories, barmaker). Joue une seule fois, au premier demarrage.
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U barapp"]
       interval: 5s
       timeout: 3s
       retries: 10
+    restart: unless-stopped
 
   back:
     build: ./back
@@ -24,9 +26,22 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/barapp
       SPRING_DATASOURCE_USERNAME: barapp
       SPRING_DATASOURCE_PASSWORD: barapp
+      # Le schema et les donnees proviennent du script d'init SQL : Hibernate ne modifie pas la base
+      SPRING_JPA_DDL_AUTO: none
       APP_JWT_SECRET: change-me-in-prod-please-1234567890-abcdefghijklmnop
+      # Cle DeepL optionnelle pour traduire les imports ; sans elle, repli automatique sur MyMemory (gratuit)
+      DEEPL_API_KEY: ${DEEPL_API_KEY:-}
     ports:
-      - "8080:8080"
+      - "8081:8080"
+    restart: unless-stopped
+
+  front:
+    build: ./front
+    depends_on:
+      - back
+    ports:
+      - "8080:80"
+    restart: unless-stopped
 
 volumes:
   db-data:
