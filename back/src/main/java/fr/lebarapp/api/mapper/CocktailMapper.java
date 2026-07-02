@@ -9,7 +9,6 @@ import fr.lebarapp.api.dto.CocktailResponse;
 import fr.lebarapp.api.dto.SizePriceRequest;
 import fr.lebarapp.api.dto.SizePriceResponse;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CocktailMapper {
 
@@ -34,11 +33,11 @@ public class CocktailMapper {
     public static CocktailResponse toResponse(Cocktail cocktail) {
         List<CocktailIngredientResponse> ingredientResponses = cocktail.getIngredients().stream()
             .map(ci -> new CocktailIngredientResponse(ci.getIngredient().getName(), ci.getMeasure()))
-            .collect(Collectors.toList());
+            .toList();
 
         List<SizePriceResponse> sizePrices = cocktail.getSizes().stream()
             .map(cs -> new SizePriceResponse(cs.getSize(), cs.getPrice()))
-            .collect(Collectors.toList());
+            .toList();
 
         String imageUrl = cocktail.getId() != null ? "/api/cocktails/" + cocktail.getId() + "/image" : null;
 

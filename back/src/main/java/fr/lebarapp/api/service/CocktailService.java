@@ -16,7 +16,6 @@ import fr.lebarapp.api.repository.CocktailImageRepository;
 import fr.lebarapp.api.repository.CocktailRepository;
 import fr.lebarapp.api.repository.IngredientRepository;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -50,14 +49,14 @@ public class CocktailService {
     public List<CocktailResponse> getAllCocktails() {
         return cocktailRepository.findAll().stream()
             .map(CocktailMapper::toResponse)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     @Transactional(readOnly = true)
     public List<CocktailResponse> getCocktailsByCategory(Long categoryId) {
         return cocktailRepository.findByCategoryId(categoryId).stream()
             .map(CocktailMapper::toResponse)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     @Transactional(readOnly = true)
@@ -76,31 +75,8 @@ public class CocktailService {
             .orElseThrow(() -> new ResourceNotFoundException("Catégorie introuvable avec l'ID: " + request.categoryId()));
         cocktail.setCategory(category);
 
-        // Résoudre et ajouter les ingrédients
-        if (request.ingredients() != null && !request.ingredients().isEmpty()) {
-            java.util.Set<Long> seen = new java.util.HashSet<>();
-            for (CocktailIngredientRequest ingredientReq : request.ingredients()) {
-                Ingredient ingredient = ingredientRepository.findByNameIgnoreCase(ingredientReq.name())
-                    .orElseGet(() -> {
-                        Ingredient newIng = new Ingredient();
-                        newIng.setName(ingredientReq.name());
-                        return ingredientRepository.save(newIng);
-                    });
-
-                // Éviter un même ingrédient deux fois (contrainte unique cocktail+ingrédient)
-                if (!seen.add(ingredient.getId())) {
-                    continue;
-                }
-
-                CocktailIngredient ci = new CocktailIngredient();
-                ci.setCocktail(cocktail);
-                ci.setIngredient(ingredient);
-                ci.setMeasure(ingredientReq.measure());
-                cocktail.getIngredients().add(ci);
-            }
-        }
-
-        // Ajouter les tailles/prix
+        // Appliquer les ingrédients et les tailles
+        applyIngredients(cocktail, request.ingredients());
         CocktailMapper.updateSizes(cocktail, request.sizes());
 
         cocktail = cocktailRepository.save(cocktail);
@@ -131,30 +107,9 @@ public class CocktailService {
         cocktail.getIngredients().clear();
         cocktail.getSizes().clear();
         cocktailRepository.saveAndFlush(cocktail);
-        if (request.ingredients() != null && !request.ingredients().isEmpty()) {
-            java.util.Set<Long> seen = new java.util.HashSet<>();
-            for (CocktailIngredientRequest ingredientReq : request.ingredients()) {
-                Ingredient ingredient = ingredientRepository.findByNameIgnoreCase(ingredientReq.name())
-                    .orElseGet(() -> {
-                        Ingredient newIng = new Ingredient();
-                        newIng.setName(ingredientReq.name());
-                        return ingredientRepository.save(newIng);
-                    });
 
-                // Éviter un même ingrédient deux fois (contrainte unique cocktail+ingrédient)
-                if (!seen.add(ingredient.getId())) {
-                    continue;
-                }
-
-                CocktailIngredient ci = new CocktailIngredient();
-                ci.setCocktail(cocktail);
-                ci.setIngredient(ingredient);
-                ci.setMeasure(ingredientReq.measure());
-                cocktail.getIngredients().add(ci);
-            }
-        }
-
-        // Mettre à jour les tailles/prix (orphanRemoval gère la suppression)
+        // Appliquer les ingrédients et les tailles
+        applyIngredients(cocktail, request.ingredients());
         CocktailMapper.updateSizes(cocktail, request.sizes());
 
         cocktail = cocktailRepository.save(cocktail);
@@ -178,6 +133,31 @@ public class CocktailService {
             // Le cocktail est référencé par des commandes : on bloque proprement
             throw new fr.lebarapp.api.error.BusinessException(
                 "Impossible de supprimer ce cocktail : il figure dans des commandes.");
+        }
+    }
+
+    private void applyIngredients(Cocktail cocktail, List<CocktailIngredientRequest> ingredientRequests) {
+        if (ingredientRequests != null && !ingredientRequests.isEmpty()) {
+            java.util.Set<Long> seen = new java.util.HashSet<>();
+            for (CocktailIngredientRequest ingredientReq : ingredientRequests) {
+                Ingredient ingredient = ingredientRepository.findByNameIgnoreCase(ingredientReq.name())
+                    .orElseGet(() -> {
+                        Ingredient newIng = new Ingredient();
+                        newIng.setName(ingredientReq.name());
+                        return ingredientRepository.save(newIng);
+                    });
+
+                // Éviter un même ingrédient deux fois (contrainte unique cocktail+ingrédient)
+                if (!seen.add(ingredient.getId())) {
+                    continue;
+                }
+
+                CocktailIngredient ci = new CocktailIngredient();
+                ci.setCocktail(cocktail);
+                ci.setIngredient(ingredient);
+                ci.setMeasure(ingredientReq.measure());
+                cocktail.getIngredients().add(ci);
+            }
         }
     }
 

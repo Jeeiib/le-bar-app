@@ -7,7 +7,6 @@ import fr.lebarapp.api.error.ResourceNotFoundException;
 import fr.lebarapp.api.mapper.CategoryMapper;
 import fr.lebarapp.api.repository.CategoryRepository;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +19,14 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<CategoryResponse> getAllCategories() {
         return categoryRepository.findAllByOrderByPositionAsc().stream()
             .map(CategoryMapper::toResponse)
-            .collect(Collectors.toList());
+            .toList();
     }
 
+    @Transactional(readOnly = true)
     public CategoryResponse getCategoryById(Long id) {
         Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Catégorie introuvable avec l'ID: " + id));
@@ -52,6 +53,13 @@ public class CategoryService {
     public void deleteCategory(Long id) {
         Category category = categoryRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Catégorie introuvable avec l'ID: " + id));
-        categoryRepository.delete(category);
+        try {
+            categoryRepository.delete(category);
+            categoryRepository.flush();
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            // La catégorie est référencée par des cocktails : on bloque proprement
+            throw new fr.lebarapp.api.error.BusinessException(
+                "Impossible de supprimer cette catégorie : elle contient des cocktails.");
+        }
     }
 }

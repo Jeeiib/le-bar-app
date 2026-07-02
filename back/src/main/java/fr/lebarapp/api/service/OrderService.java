@@ -20,7 +20,6 @@ import fr.lebarapp.api.repository.OrderRepository;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,7 +84,7 @@ public class OrderService {
         List<OrderStatus> statuses = Arrays.asList(OrderStatus.COMMANDEE, OrderStatus.EN_PREPARATION);
         return orderRepository.findByStatusInOrderByCreatedAtAsc(statuses).stream()
             .map(OrderMapper::toResponse)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     @Transactional(readOnly = true)
