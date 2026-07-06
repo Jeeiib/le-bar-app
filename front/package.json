@@ -25,7 +25,7 @@
   "devDependencies": {
     "@tsconfig/node24": "^24.0.4",
     "@types/jsdom": "^28.0.3",
-    "@types/node": "^24.13.2",
+    "@types/node": "^26.1.0",
     "@vitejs/plugin-vue": "^6.0.7",
     "@vitest/coverage-v8": "^4.1.9",
     "@vitest/eslint-plugin": "^1.6.20",
