@@ -126,7 +126,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.13</version>
+				<version>0.8.15</version>
 				<configuration>
 					<!-- Hors mesure : code genere (entites Lombok), DTOs (records), bootstrap, et integration externe (client HTTP TheCocktailDB + seeder de demo). On mesure la logique metier. -->
 					<excludes>
