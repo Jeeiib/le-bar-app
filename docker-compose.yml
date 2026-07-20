@@ -1,17 +1,18 @@
 services:
   db:
     image: postgres:16-alpine
+    # Identifiants lus depuis le fichier .env (non versionne, voir .env.example)
     environment:
-      POSTGRES_DB: barapp
-      POSTGRES_USER: barapp
-      POSTGRES_PASSWORD: barapp
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - db-data:/var/lib/postgresql/data
       # Script d'initialisation : cree le schema et charge la carte de demonstration
       # (cocktails, photos, categories, barmaker). Joue une seule fois, au premier demarrage.
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U barapp"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
       interval: 5s
       timeout: 3s
       retries: 10
@@ -22,13 +23,14 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    # Secrets et identifiants lus depuis le fichier .env (non versionne, voir .env.example)
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/barapp
-      SPRING_DATASOURCE_USERNAME: barapp
-      SPRING_DATASOURCE_PASSWORD: barapp
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       # Le schema et les donnees proviennent du script d'init SQL : Hibernate ne modifie pas la base
       SPRING_JPA_DDL_AUTO: none
-      APP_JWT_SECRET: change-me-in-prod-please-1234567890-abcdefghijklmnop
+      APP_JWT_SECRET: ${APP_JWT_SECRET}
       # Cle DeepL optionnelle pour traduire les imports ; sans elle, repli automatique sur MyMemory (gratuit)
       DEEPL_API_KEY: ${DEEPL_API_KEY:-}
     ports:
