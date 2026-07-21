@@ -32,11 +32,14 @@ Tout se trouve dans le dossier `docs/` :
 
 Pré-requis : **Docker** et **Docker Compose**
 
-Depuis la racine du projet :
+Depuis la racine du projet, créer le fichier de secrets local `.env` à partir du modèle versionné `.env.example`, puis lancer :
 
 ```bash
+cp .env.example .env
 docker compose up --build
 ```
+
+> Les identifiants de la base et le secret JWT sont lus depuis `.env`. Ce fichier **n'est pas versionné** (il figure dans `.gitignore`) : seuls les secrets réels y sont placés. Le modèle `.env.example`, lui, est versionné et documente les variables attendues. En production, on renseigne `.env` avec de vrais secrets (jamais commités).
 
 Trois conteneurs démarrent : la base PostgreSQL, l'API et le front.
 
@@ -77,10 +80,11 @@ Pour valider l'application après le démarrage :
 
 ### Traduction des imports (optionnel)
 
-La carte de démonstration est déjà en français (figée dans `db/init.sql`). Lorsque le barmaker importe un nouveau cocktail depuis TheCocktailDB, sa fiche est traduite à la volée : par défaut via MyMemory (gratuit, sans clé), ou via DeepL si une clé est fournie :
+La carte de démonstration est déjà en français (figée dans `db/init.sql`). Lorsque le barmaker importe un nouveau cocktail depuis TheCocktailDB, sa fiche est traduite à la volée : par défaut via MyMemory (gratuit, sans clé), ou via DeepL si une clé est renseignée dans le `.env` :
 
 ```bash
-DEEPL_API_KEY="votre-cle:fx" docker compose up --build
+# dans .env
+DEEPL_API_KEY=votre-cle:fx
 ```
 
 ### Arrêter / réinitialiser
