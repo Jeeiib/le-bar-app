@@ -1,6 +1,6 @@
 package fr.lebarapp.api.dto;
 
-import fr.lebarapp.api.domain.Size;
+import fr.lebarapp.api.entity.Size;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;

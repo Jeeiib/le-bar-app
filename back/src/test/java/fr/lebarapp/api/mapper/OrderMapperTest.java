@@ -2,7 +2,7 @@ package fr.lebarapp.api.mapper;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import fr.lebarapp.api.domain.*;
+import fr.lebarapp.api.entity.*;
 import fr.lebarapp.api.dto.OrderItemResponse;
 import fr.lebarapp.api.dto.OrderResponse;
 import java.math.BigDecimal;

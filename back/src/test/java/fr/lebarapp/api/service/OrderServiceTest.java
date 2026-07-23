@@ -4,12 +4,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import fr.lebarapp.api.domain.*;
+import fr.lebarapp.api.entity.*;
 import fr.lebarapp.api.dto.OrderItemRequest;
 import fr.lebarapp.api.dto.OrderRequest;
 import fr.lebarapp.api.dto.OrderResponse;
-import fr.lebarapp.api.error.BusinessException;
-import fr.lebarapp.api.error.ResourceNotFoundException;
+import fr.lebarapp.api.exception.BusinessException;
+import fr.lebarapp.api.exception.ResourceNotFoundException;
 import fr.lebarapp.api.repository.*;
 import java.math.BigDecimal;
 import java.util.*;

@@ -1,14 +1,14 @@
 package fr.lebarapp.api.service;
 
-import fr.lebarapp.api.domain.Cocktail;
-import fr.lebarapp.api.domain.CocktailIngredient;
-import fr.lebarapp.api.domain.CocktailImage;
-import fr.lebarapp.api.domain.Category;
-import fr.lebarapp.api.domain.Ingredient;
+import fr.lebarapp.api.entity.Cocktail;
+import fr.lebarapp.api.entity.CocktailIngredient;
+import fr.lebarapp.api.entity.CocktailImage;
+import fr.lebarapp.api.entity.Category;
+import fr.lebarapp.api.entity.Ingredient;
 import fr.lebarapp.api.dto.CocktailIngredientRequest;
 import fr.lebarapp.api.dto.CocktailRequest;
 import fr.lebarapp.api.dto.CocktailResponse;
-import fr.lebarapp.api.error.ResourceNotFoundException;
+import fr.lebarapp.api.exception.ResourceNotFoundException;
 import fr.lebarapp.api.external.TheCocktailDbClient;
 import fr.lebarapp.api.mapper.CocktailMapper;
 import fr.lebarapp.api.repository.CategoryRepository;
@@ -133,7 +133,7 @@ public class CocktailService {
             cocktailRepository.flush();
         } catch (org.springframework.dao.DataIntegrityViolationException e) {
             // Le cocktail est référencé par des commandes : on bloque proprement
-            throw new fr.lebarapp.api.error.BusinessException(
+            throw new fr.lebarapp.api.exception.BusinessException(
                 "Impossible de supprimer ce cocktail : il figure dans des commandes.");
         }
     }

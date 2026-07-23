@@ -3,8 +3,8 @@ package fr.lebarapp.api.security;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import fr.lebarapp.api.domain.User;
-import fr.lebarapp.api.domain.UserRole;
+import fr.lebarapp.api.entity.User;
+import fr.lebarapp.api.entity.UserRole;
 import fr.lebarapp.api.repository.UserRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;

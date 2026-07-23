@@ -1,14 +1,14 @@
 package fr.lebarapp.api.config;
 
-import fr.lebarapp.api.domain.BarTable;
-import fr.lebarapp.api.domain.Category;
-import fr.lebarapp.api.domain.Cocktail;
-import fr.lebarapp.api.domain.CocktailIngredient;
-import fr.lebarapp.api.domain.CocktailImage;
-import fr.lebarapp.api.domain.CocktailSize;
-import fr.lebarapp.api.domain.Size;
-import fr.lebarapp.api.domain.User;
-import fr.lebarapp.api.domain.UserRole;
+import fr.lebarapp.api.entity.BarTable;
+import fr.lebarapp.api.entity.Category;
+import fr.lebarapp.api.entity.Cocktail;
+import fr.lebarapp.api.entity.CocktailIngredient;
+import fr.lebarapp.api.entity.CocktailImage;
+import fr.lebarapp.api.entity.CocktailSize;
+import fr.lebarapp.api.entity.Size;
+import fr.lebarapp.api.entity.User;
+import fr.lebarapp.api.entity.UserRole;
 import fr.lebarapp.api.external.ExternalCocktailDto;
 import fr.lebarapp.api.external.ExternalIngredientDto;
 import fr.lebarapp.api.external.TheCocktailDbClient;
@@ -208,7 +208,7 @@ public class DataInitializer implements CommandLineRunner {
     private void addIngredient(Cocktail cocktail, String name, String measure) {
         var ingredient = ingredientRepository.findByNameIgnoreCase(name)
             .orElseGet(() -> {
-                var ing = new fr.lebarapp.api.domain.Ingredient();
+                var ing = new fr.lebarapp.api.entity.Ingredient();
                 ing.setName(name);
                 return ingredientRepository.save(ing);
             });

@@ -2,10 +2,10 @@ package fr.lebarapp.api.mapper;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import fr.lebarapp.api.domain.Cocktail;
-import fr.lebarapp.api.domain.Category;
-import fr.lebarapp.api.domain.CocktailIngredient;
-import fr.lebarapp.api.domain.Size;
+import fr.lebarapp.api.entity.Cocktail;
+import fr.lebarapp.api.entity.Category;
+import fr.lebarapp.api.entity.CocktailIngredient;
+import fr.lebarapp.api.entity.Size;
 import fr.lebarapp.api.dto.CocktailIngredientRequest;
 import fr.lebarapp.api.dto.CocktailRequest;
 import fr.lebarapp.api.dto.CocktailResponse;
@@ -109,7 +109,7 @@ class CocktailMapperTest {
   @Test
   @DisplayName("toResponse should include ingredients with measure")
   void testToResponseWithIngredients() {
-    fr.lebarapp.api.domain.Ingredient ing = new fr.lebarapp.api.domain.Ingredient();
+    fr.lebarapp.api.entity.Ingredient ing = new fr.lebarapp.api.entity.Ingredient();
     ing.setId(2L);
     ing.setName("Rum");
 

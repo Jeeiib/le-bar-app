@@ -7,11 +7,11 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import fr.lebarapp.api.domain.BarTable;
+import fr.lebarapp.api.entity.BarTable;
 import fr.lebarapp.api.dto.TableRequest;
 import fr.lebarapp.api.dto.TableResponse;
-import fr.lebarapp.api.error.BusinessException;
-import fr.lebarapp.api.error.ResourceNotFoundException;
+import fr.lebarapp.api.exception.BusinessException;
+import fr.lebarapp.api.exception.ResourceNotFoundException;
 import fr.lebarapp.api.repository.BarTableRepository;
 import java.util.List;
 import java.util.Optional;

@@ -1,6 +1,6 @@
 package fr.lebarapp.api.dto;
 
-import fr.lebarapp.api.domain.OrderStatus;
+import fr.lebarapp.api.entity.OrderStatus;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;

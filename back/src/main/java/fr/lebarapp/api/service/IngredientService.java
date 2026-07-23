@@ -1,9 +1,9 @@
 package fr.lebarapp.api.service;
 
-import fr.lebarapp.api.domain.Ingredient;
+import fr.lebarapp.api.entity.Ingredient;
 import fr.lebarapp.api.dto.IngredientRequest;
 import fr.lebarapp.api.dto.IngredientResponse;
-import fr.lebarapp.api.error.ResourceNotFoundException;
+import fr.lebarapp.api.exception.ResourceNotFoundException;
 import fr.lebarapp.api.mapper.IngredientMapper;
 import fr.lebarapp.api.repository.IngredientRepository;
 import java.util.List;
@@ -60,7 +60,7 @@ public class IngredientService {
             ingredientRepository.flush();
         } catch (org.springframework.dao.DataIntegrityViolationException e) {
             // L'ingrédient est référencé par des cocktails : on bloque proprement
-            throw new fr.lebarapp.api.error.BusinessException(
+            throw new fr.lebarapp.api.exception.BusinessException(
                 "Impossible de supprimer cet ingrédient : il figure dans des cocktails.");
         }
     }

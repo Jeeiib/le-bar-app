@@ -1,7 +1,7 @@
 package fr.lebarapp.api.repository;
 
-import fr.lebarapp.api.domain.Order;
-import fr.lebarapp.api.domain.OrderStatus;
+import fr.lebarapp.api.entity.Order;
+import fr.lebarapp.api.entity.OrderStatus;
 import java.util.Collection;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

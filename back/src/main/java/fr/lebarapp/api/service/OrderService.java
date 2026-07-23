@@ -1,17 +1,17 @@
 package fr.lebarapp.api.service;
 
-import fr.lebarapp.api.domain.BarTable;
-import fr.lebarapp.api.domain.Cocktail;
-import fr.lebarapp.api.domain.CocktailSize;
-import fr.lebarapp.api.domain.Order;
-import fr.lebarapp.api.domain.OrderItem;
-import fr.lebarapp.api.domain.OrderStatus;
-import fr.lebarapp.api.domain.PrepStatus;
-import fr.lebarapp.api.domain.Size;
+import fr.lebarapp.api.entity.BarTable;
+import fr.lebarapp.api.entity.Cocktail;
+import fr.lebarapp.api.entity.CocktailSize;
+import fr.lebarapp.api.entity.Order;
+import fr.lebarapp.api.entity.OrderItem;
+import fr.lebarapp.api.entity.OrderStatus;
+import fr.lebarapp.api.entity.PrepStatus;
+import fr.lebarapp.api.entity.Size;
 import fr.lebarapp.api.dto.OrderRequest;
 import fr.lebarapp.api.dto.OrderResponse;
-import fr.lebarapp.api.error.BusinessException;
-import fr.lebarapp.api.error.ResourceNotFoundException;
+import fr.lebarapp.api.exception.BusinessException;
+import fr.lebarapp.api.exception.ResourceNotFoundException;
 import fr.lebarapp.api.mapper.OrderMapper;
 import fr.lebarapp.api.repository.BarTableRepository;
 import fr.lebarapp.api.repository.CocktailRepository;

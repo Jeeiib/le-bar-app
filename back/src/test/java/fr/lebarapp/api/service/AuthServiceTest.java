@@ -4,12 +4,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import fr.lebarapp.api.domain.User;
-import fr.lebarapp.api.domain.UserRole;
+import fr.lebarapp.api.entity.User;
+import fr.lebarapp.api.entity.UserRole;
 import fr.lebarapp.api.dto.AuthResponse;
 import fr.lebarapp.api.dto.LoginRequest;
 import fr.lebarapp.api.dto.RegisterRequest;
-import fr.lebarapp.api.error.BusinessException;
+import fr.lebarapp.api.exception.BusinessException;
 import fr.lebarapp.api.repository.UserRepository;
 import fr.lebarapp.api.security.JwtService;
 import java.util.Optional;

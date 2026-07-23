@@ -4,10 +4,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import fr.lebarapp.api.domain.Ingredient;
+import fr.lebarapp.api.entity.Ingredient;
 import fr.lebarapp.api.dto.IngredientRequest;
 import fr.lebarapp.api.dto.IngredientResponse;
-import fr.lebarapp.api.error.ResourceNotFoundException;
+import fr.lebarapp.api.exception.ResourceNotFoundException;
 import fr.lebarapp.api.repository.IngredientRepository;
 import java.util.List;
 import java.util.Optional;

@@ -1,6 +1,6 @@
 package fr.lebarapp.api.repository;
 
-import fr.lebarapp.api.domain.CocktailImage;
+import fr.lebarapp.api.entity.CocktailImage;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

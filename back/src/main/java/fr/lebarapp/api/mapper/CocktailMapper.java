@@ -1,8 +1,8 @@
 package fr.lebarapp.api.mapper;
 
-import fr.lebarapp.api.domain.Cocktail;
-import fr.lebarapp.api.domain.CocktailIngredient;
-import fr.lebarapp.api.domain.CocktailSize;
+import fr.lebarapp.api.entity.Cocktail;
+import fr.lebarapp.api.entity.CocktailIngredient;
+import fr.lebarapp.api.entity.CocktailSize;
 import fr.lebarapp.api.dto.CocktailIngredientResponse;
 import fr.lebarapp.api.dto.CocktailRequest;
 import fr.lebarapp.api.dto.CocktailResponse;

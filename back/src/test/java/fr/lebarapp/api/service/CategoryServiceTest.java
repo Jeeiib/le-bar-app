@@ -4,10 +4,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import fr.lebarapp.api.domain.Category;
+import fr.lebarapp.api.entity.Category;
 import fr.lebarapp.api.dto.CategoryRequest;
 import fr.lebarapp.api.dto.CategoryResponse;
-import fr.lebarapp.api.error.ResourceNotFoundException;
+import fr.lebarapp.api.exception.ResourceNotFoundException;
 import fr.lebarapp.api.mapper.CategoryMapper;
 import fr.lebarapp.api.repository.CategoryRepository;
 import java.util.List;
