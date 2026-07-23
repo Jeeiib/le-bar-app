@@ -1,7 +1,7 @@
 package fr.lebarapp.api.mapper;
 
-import fr.lebarapp.api.domain.Order;
-import fr.lebarapp.api.domain.OrderItem;
+import fr.lebarapp.api.entity.Order;
+import fr.lebarapp.api.entity.OrderItem;
 import fr.lebarapp.api.dto.OrderItemResponse;
 import fr.lebarapp.api.dto.OrderResponse;
 import java.math.BigDecimal;

@@ -1,7 +1,7 @@
 package fr.lebarapp.api.dto;
 
-import fr.lebarapp.api.domain.PrepStatus;
-import fr.lebarapp.api.domain.Size;
+import fr.lebarapp.api.entity.PrepStatus;
+import fr.lebarapp.api.entity.Size;
 import java.math.BigDecimal;
 
 // Un article d'une commande, avec son prix figé au moment de l'achat et son étape de préparation.

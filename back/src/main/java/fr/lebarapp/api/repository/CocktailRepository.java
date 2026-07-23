@@ -1,6 +1,6 @@
 package fr.lebarapp.api.repository;
 
-import fr.lebarapp.api.domain.Cocktail;
+import fr.lebarapp.api.entity.Cocktail;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 

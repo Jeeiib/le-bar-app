@@ -1,6 +1,6 @@
 package fr.lebarapp.api.mapper;
 
-import fr.lebarapp.api.domain.Ingredient;
+import fr.lebarapp.api.entity.Ingredient;
 import fr.lebarapp.api.dto.IngredientRequest;
 import fr.lebarapp.api.dto.IngredientResponse;
 

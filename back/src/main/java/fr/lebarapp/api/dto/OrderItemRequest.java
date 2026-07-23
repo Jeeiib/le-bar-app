@@ -1,6 +1,6 @@
 package fr.lebarapp.api.dto;
 
-import fr.lebarapp.api.domain.Size;
+import fr.lebarapp.api.entity.Size;
 import jakarta.validation.constraints.NotNull;
 
 // Un article demandé dans une commande : quel cocktail et quelle taille.

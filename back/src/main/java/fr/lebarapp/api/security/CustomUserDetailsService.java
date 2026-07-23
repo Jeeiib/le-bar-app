@@ -1,6 +1,6 @@
 package fr.lebarapp.api.security;
 
-import fr.lebarapp.api.domain.User;
+import fr.lebarapp.api.entity.User;
 import fr.lebarapp.api.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

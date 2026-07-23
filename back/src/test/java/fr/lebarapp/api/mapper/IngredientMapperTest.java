@@ -2,7 +2,7 @@ package fr.lebarapp.api.mapper;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import fr.lebarapp.api.domain.Ingredient;
+import fr.lebarapp.api.entity.Ingredient;
 import fr.lebarapp.api.dto.IngredientRequest;
 import fr.lebarapp.api.dto.IngredientResponse;
 import org.junit.jupiter.api.DisplayName;

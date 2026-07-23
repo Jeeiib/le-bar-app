@@ -1,6 +1,6 @@
 package fr.lebarapp.api.mapper;
 
-import fr.lebarapp.api.domain.Category;
+import fr.lebarapp.api.entity.Category;
 import fr.lebarapp.api.dto.CategoryRequest;
 import fr.lebarapp.api.dto.CategoryResponse;
 
